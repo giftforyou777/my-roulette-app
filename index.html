@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎰 Горизонтальная Рулетка</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            color: #ffd700;
+            background: linear-gradient(45deg, #ffd700, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .roulette-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+        
+        .roulette-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            will-change: transform;
+        }
+        
+        .roulette-item {
+            width: 120px;
+            height: 120px;
+            margin: 0 10px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c2c2c 0%, #404040 100%);
+            border: 2px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+        }
+        
+        .prize-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 2px solid #ffd700;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .prize-name {
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            padding: 0 5px;
+        }
+        
+        .spin-button {
+            background: linear-gradient(135deg, #ff6b00 0%, #ffd700 100%);
+            border: none;
+            padding: 16px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .spin-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+        }
+        
+        .spin-button:disabled {
+            background: linear-gradient(135deg, #555 0%, #777 100%);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 25px solid #ffd700;
+            z-index: 10;
+            filter: drop-shadow(2px 0 6px rgba(0, 0, 0, 0.7));
+        }
+        
+        .result {
+            margin-top: 20px;
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            margin: 10px auto;
+            object-fit: contain;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .prize-title {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #ffd700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+        
+        .prize-description {
+            color: #ccc;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        
+        .claim-button {
+            background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
+            border: none;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+        }
+        
+        .claim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.6);
+        }
+        
+        .loading {
+            display: none;
+            font-size: 16px;
+            margin-top: 20px;
+            color: #ffd700;
+            animation: pulse 1s infinite;
+        }
+        
+        .win-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 140px;
+            background: linear-gradient(to bottom, transparent, #ffd700, transparent);
+            z-index: 5;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎰 РУЛЕТКА</h1>
+        
+        <div class="roulette-container">
+            <div class="win-line"></div>
+            <div class="pointer"></div>
+            <div class="roulette-track" id="rouletteTrack">
+                <!-- Подарки будут добавлены через JavaScript -->
+            </div>
+        </div>
+        
+        <button class="spin-button" id="spinButton">🎯 КРУТИТЬ РУЛЕТКУ</button>
+        
+        <div class="loading" id="loading">
+            ⏳ Обработка результата...
+        </div>
+        
+        <div class="result" id="result">
+            <img class="result-image" id="resultImage" src="" alt="Приз">
+            <div class="prize-title" id="prizeName"></div>
+            <div class="prize-description" id="prizeDescription"></div>
+            <button class="claim-button" id="claimButton">✅ ЗАБРАТЬ ПРИЗ</button>
+        </div>
+    </div>
+
+    <script>
+        // Призы для рулетки
+        const prizes = [
+            { 
+                name: "10 монет", 
+                image: "gift1.png", 
+                probability: 99.88,
+                description: "10 монет добавлены на ваш баланс!",
+                color: "linear-gradient(135deg, #4CAF50, #45a049)"
+            },
+            { 
+                name: "100 монет", 
+                image: "gift2.png", 
+                probability: 0.01,
+                description: "100 монет добавлены на ваш баланс!",
+                color: "linear-gradient(135deg, #FFD700, #FFA500)"
+            },
+            { 
+                name: "50 монет", 
+                image: "gift3.png", 
+                probability: 0.01,
+                description: "50 монет добавлены на ваш баланс!",
+                color: "linear-gradient(135deg, #2196F3, #1976D2)"
+            },
+            { 
+                name: "Evil Eye", 
+                image: "gift4.png", 
+                probability: 0.01,
+                description: "Эксклюзивный Evil Eye!",
+                color: "linear-gradient(135deg, #9C27B0, #7B1FA2)"
+            },
+            { 
+                name: "Berry Box", 
+                image: "gift5.png", 
+                probability: 0.01,
+                description: "Вкусная Berry Box!",
+                color: "linear-gradient(135deg, #E91E63, #C2185B)"
+            },
+            { 
+                name: "Vintage Cigar", 
+                image: "gift6.png", 
+                probability: 0.01,
+                description: "Роскошный Vintage Cigar!",
+                color: "linear-gradient(135deg, #795548, #5D4037)"
+            },
+            { 
+                name: "Lol Pop", 
+                image: "gift7.png", 
+                probability: 0.01,
+                description: "Сладкий Lol Pop!",
+                color: "linear-gradient(135deg, #FF5722, #D84315)"
+            },
+            { 
+                name: "Lol Pop", 
+                image: "gift8.png", 
+                probability: 0.01,
+                description: "Еще один сладкий Lol Pop!",
+                color: "linear-gradient(135deg, #FF9800, #F57C00)"
+            },
+            { 
+                name: "Ginger Cookie", 
+                image: "gift9.png", 
+                probability: 0.01,
+                description: "Ароматный Ginger Cookie!",
+                color: "linear-gradient(135deg, #607D8B, #455A64)"
+            },
+            { 
+                name: "Swiss Watch", 
+                image: "gift10.png", 
+                probability: 0.01,
+                description: "Элегантные Swiss Watch!",
+                color: "linear-gradient(135deg, #00BCD4, #0097A7)"
+            },
+            { 
+                name: "Heroic Helmet", 
+                image: "gift11.png", 
+                probability: 0.01,
+                description: "Легендарный Heroic Helmet!",
+                color: "linear-gradient(135deg, #3F51B5, #303F9F)"
+            },
+            { 
+                name: "Jolly Chimp", 
+                image: "gift12.png", 
+                probability: 0.01,
+                description: "Веселый Jolly Chimp!",
+                color: "linear-gradient(135deg, #CDDC39, #AFB42B)"
+            },
+            { 
+                name: "Snoop Dogg", 
+                image: "gift13.png", 
+                probability: 0.01,
+                description: "Эксклюзивный Snoop Dogg!",
+                color: "linear-gradient(135deg, #FFEB3B, #FBC02D)"
+            }
+        ];
+
+        const ITEM_WIDTH = 140;
+        const CONTAINER_WIDTH = 400;
+        const BASE_SPEED = 30;
+        
+        let isSpinning = false;
+        let selectedPrize = null;
+        let currentPosition = 0;
+        let currentSpeed = BASE_SPEED;
+        let animationId = null;
+        let targetPrizeIndex = 0;
+        let startTimestamp = 0;
+
+        // Создание рулетки
+        function createRoulette() {
+            const track = document.getElementById('rouletteTrack');
+            track.innerHTML = '';
+            
+            for (let i = 0; i < prizes.length * 2; i++) {
+                const prizeIndex = i % prizes.length;
+                const prize = prizes[prizeIndex];
+                const item = createRouletteItem(prize);
+                track.appendChild(item);
+            }
+            
+            track.style.width = `${prizes.length * 2 * ITEM_WIDTH}px`;
+            track.style.transform = 'translateX(0px)';
+            currentPosition = 0;
+        }
+
+        function createRouletteItem(prize) {
+            const item = document.createElement('div');
+            item.className = 'roulette-item';
+            item.style.background = prize.color;
+            
+            const img = document.createElement('img');
+            img.className = 'prize-image';
+            img.src = `images/${prize.image}`;
+            img.alt = prize.name;
+            img.onerror = () => {
+                img.style.display = 'none';
+                const text = document.createElement('div');
+                text.className = 'prize-name';
+                text.textContent = prize.name;
+                text.style.fontSize = '14px';
+                text.style.padding = '15px 5px';
+                item.appendChild(text);
+            };
+            
+            const name = document.createElement('div');
+            name.className = 'prize-name';
+            name.textContent = prize.name;
+            
+            item.appendChild(img);
+            item.appendChild(name);
+            return item;
+        }
+
+        function selectRandomPrize() {
+            const total = prizes.reduce((sum, p) => sum + p.probability, 0);
+            let random = Math.random() * total;
+            
+            for (let i = 0; i < prizes.length; i++) {
+                random -= prizes[i].probability;
+                if (random <= 0) {
+                    return { prize: prizes[i], index: i };
+                }
+            }
+            return { prize: prizes[0], index: 0 };
+        }
+
+        function spinRoulette() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            const spinButton = document.getElementById('spinButton');
+            spinButton.disabled = true;
+            document.getElementById('result').style.display = 'none';
+            
+            currentSpeed = BASE_SPEED;
+            const selection = selectRandomPrize();
+            selectedPrize = selection.prize;
+            targetPrizeIndex = selection.index;
+            
+            const track = document.getElementById('rouletteTrack');
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0px)';
+            currentPosition = 0;
+            
+            startTimestamp = performance.now();
+            startAnimation();
+            
+            setTimeout(() => {
+                startSlowdown();
+            }, 3000);
+        }
+
+        function startAnimation() {
+            const track = document.getElementById('rouletteTrack');
+            const segmentWidth = prizes.length * ITEM_WIDTH;
+            
+            function animate(timestamp) {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const elapsed = timestamp - startTimestamp;
+                
+                if (elapsed < 1000) {
+                    currentSpeed = BASE_SPEED * Math.min(elapsed / 1000, 1);
+                }
+                
+                currentPosition -= currentSpeed;
+                
+                if (Math.abs(currentPosition) >= segmentWidth) {
+                    currentPosition += segmentWidth;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(${currentPosition}px)`;
+                } else {
+                    track.style.transform = `translateX(${currentPosition}px)`;
+                }
+                
+                if (isSpinning) {
+                    animationId = requestAnimationFrame(animate);
+                }
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function startSlowdown() {
+            const slowdownStart = performance.now();
+            const slowdownDuration = 2000;
+            
+            function slowDown() {
+                const elapsed = performance.now() - slowdownStart;
+                const progress = Math.min(elapsed / slowdownDuration, 1);
+                
+                currentSpeed = BASE_SPEED * Math.pow(1 - progress, 2);
+                
+                if (progress < 1) {
+                    setTimeout(slowDown, 16);
+                } else {
+                    stopOnPrize();
+                }
+            }
+            
+            slowDown();
+        }
+
+        function stopOnPrize() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            const track = document.getElementById('rouletteTrack');
+            const segmentWidth = prizes.length * ITEM_WIDTH;
+            
+            let normalizedPosition = currentPosition % segmentWidth;
+            if (normalizedPosition < 0) normalizedPosition += segmentWidth;
+            
+            const targetPosition = -(targetPrizeIndex * ITEM_WIDTH + ITEM_WIDTH / 2 - CONTAINER_WIDTH / 2);
+            
+            track.style.transition = 'transform 2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            track.style.transform = `translateX(${targetPosition}px)`;
+            
+            setTimeout(() => {
+                showResult();
+                isSpinning = false;
+                document.getElementById('spinButton').disabled = false;
+                currentPosition = targetPosition;
+            }, 2000);
+        }
+
+        function showResult() {
+            const result = document.getElementById('result');
+            const resultImage = document.getElementById('resultImage');
+            const prizeName = document.getElementById('prizeName');
+            const prizeDescription = document.getElementById('prizeDescription');
+            
+            resultImage.src = `images/${selectedPrize.image}`;
+            resultImage.onerror = () => {
+                resultImage.style.display = 'none';
+            };
+            resultImage.style.display = 'block';
+            prizeName.textContent = `🎉 ВЫ ВЫИГРАЛИ: ${selectedPrize.name.toUpperCase()}!`;
+            prizeDescription.textContent = selectedPrize.description;
+            result.style.display = 'block';
+        }
+
+        function sendResultToBot() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('claimButton').disabled = true;
+            
+            Telegram.WebApp.sendData(JSON.stringify({
+                prize_name: selectedPrize.name,
+                prize_image: selectedPrize.image
+            }));
+            
+            setTimeout(() => {
+                Telegram.WebApp.close();
+            }, 2000);
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            createRoulette();
+            
+            prizes.forEach(prize => {
+                const img = new Image();
+                img.src = `images/${prize.image}`;
+            });
+            
+            document.getElementById('spinButton').addEventListener('click', spinRoulette);
+            document.getElementById('claimButton').addEventListener('click', sendResultToBot);
+            
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            Telegram.WebApp.enableClosingConfirmation();
+        });
+    </script>
+</body>
+</html>
+[file content end]
