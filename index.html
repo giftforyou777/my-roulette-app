@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎰 Рулетка Подарков</title>
+    <title>🎰 Рулетка Удачи</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,47 +20,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 0;
+            justify-content: center;
+            padding: 20px;
             color: white;
             overflow-x: hidden;
             touch-action: manipulation;
         }
 
-        .header-bar {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .close-button {
-            color: #fff;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 16px;
-            cursor: pointer;
-        }
-
-        .app-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #d0d0ff;
-        }
-
         .container {
             background: linear-gradient(145deg, rgba(40, 30, 80, 0.95), rgba(30, 20, 60, 0.95));
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 94%;
-            margin: 15px auto;
+            width: 100%;
+            max-width: 500px;
             border: 1px solid rgba(255, 215, 0, 0.3);
             position: relative;
             overflow: hidden;
@@ -373,12 +347,6 @@
     </style>
 </head>
 <body>
-    <div class="header-bar">
-        <button class="close-button">Закрыть</button>
-        <div class="app-title">РУЛЕТКА ПОДАРКОВ</div>
-        <div style="width: 70px;"></div> <!-- Для выравнивания -->
-    </div>
-
     <div class="container">
         <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
         <p class="subtitle">Крутите ленту и выигрывайте призы!</p>
@@ -434,7 +402,6 @@
         const prizeName = document.getElementById('prizeName');
         const prizeImageLarge = document.getElementById('prizeImageLarge');
         const loading = document.getElementById('loading');
-        const closeButton = document.querySelector('.close-button');
 
         let isSpinning = false;
         let animationId = null;
@@ -642,13 +609,6 @@
                 this.style.boxShadow = '';
                 startSpinning();
             }, {passive: false});
-            
-            // Обработчик для кнопки закрытия
-            closeButton.addEventListener('click', function() {
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.close();
-                }
-            });
         });
     </script>
 </body>
