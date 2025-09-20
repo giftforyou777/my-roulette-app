@@ -32,7 +32,7 @@
             padding: 30px;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            max-width: 420px;
+            max-width: 500px;
             width: 100%;
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
@@ -65,76 +65,87 @@
         .roulette-container {
             position: relative;
             margin: 30px 0;
-            perspective: 1000px;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(255, 215, 0, 0.3);
         }
 
-        .wheel-wrapper {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 0 auto;
-        }
-
-        .wheel {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-            border-radius: 50%;
-            box-shadow: 0 0 0 10px rgba(255, 157, 0, 0.2),
-                        inset 0 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .wheel-item {
+        .roulette-track {
+            display: flex;
             position: absolute;
-            width: 100%;
+            height: 100%;
+            left: 0;
+            transition: transform 0.1s linear;
+        }
+
+        .roulette-item {
+            width: 120px;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            transform-origin: center;
-            backface-visibility: hidden;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-            overflow: hidden;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .roulette-item:nth-child(2n) {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(255, 69, 0, 0.1));
         }
 
         .prize-image {
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
-            margin-bottom: 5px;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+            margin-bottom: 10px;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+            transition: transform 0.3s ease;
         }
 
-        .pointer {
+        .roulette-item:hover .prize-image {
+            transform: scale(1.1);
+        }
+
+        .prize-name {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            color: #ffce76;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .center-line {
             position: absolute;
-            top: -25px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 50px;
-            background: linear-gradient(45deg, #ff3366, #ff3366);
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #ff3366, transparent);
             z-index: 10;
-            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
         }
 
-        .pointer::after {
-            content: '';
+        .center-marker {
             position: absolute;
-            top: 5px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 15px;
-            background: #ff3366;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 51, 102, 0.2);
+            border: 3px solid #ff3366;
             border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            backdrop-filter: blur(5px);
         }
 
         .spin-button {
@@ -187,7 +198,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .prize-name {
+        .prize-name-large {
             font-size: 26px;
             font-weight: 700;
             color: #ffce76;
@@ -237,71 +248,50 @@
             z-index: 1;
         }
 
-        .background-effects {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: twinkle 5s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-
-        .glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 157, 0, 0.2) 0%, transparent 70%);
-            filter: blur(20px);
-            animation: pulse 4s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            100% { opacity: 0.6; transform: scale(1.1); }
-        }
-
         .instructions {
             margin-top: 20px;
             font-size: 14px;
             color: #aaa;
             line-height: 1.5;
         }
+
+        .speed-control {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .speed-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .speed-value {
+            font-weight: 600;
+            color: #ffce76;
+        }
     </style>
 </head>
 <body>
-    <div class="background-effects">
-        <div class="glow" style="top: 10%; left: 10%;"></div>
-        <div class="glow" style="top: 60%; right: 15%;"></div>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
-            <p class="subtitle">Крутите колесо и выигрывайте призы!</p>
+            <p class="subtitle">Крутите ленту и выигрывайте призы!</p>
         </div>
 
         <div class="roulette-container">
-            <div class="pointer"></div>
-            <div class="wheel-wrapper">
-                <div class="wheel" id="wheel">
-                    <!-- Wheel items will be generated by JavaScript -->
-                </div>
+            <div class="center-line"></div>
+            <div class="center-marker">🎯</div>
+            <div class="roulette-track" id="rouletteTrack">
+                <!-- Roulette items will be generated by JavaScript -->
             </div>
+        </div>
+
+        <div class="speed-control">
+            <span class="speed-label">Скорость:</span>
+            <span class="speed-value" id="speedValue">5</span>
         </div>
 
         <button class="spin-button" id="spinButton">🎰 КРУТИТЬ РУЛЕТКУ</button>
@@ -314,12 +304,12 @@
         <div class="prize-display" id="prizeDisplay">
             <div class="prize-title">🎉 ПОЗДРАВЛЯЕМ!</div>
             <img class="prize-image-large" id="prizeImageLarge" src="" alt="Приз">
-            <div class="prize-name" id="prizeName"></div>
+            <div class="prize-name-large" id="prizeName"></div>
             <p>Ваш приз скоро будет зачислен</p>
         </div>
 
         <div class="instructions">
-            <p>Нажмите "Крутить рулетку" и дождитесь остановки колеса</p>
+            <p>Нажмите "Крутить рулетку" и дождитесь остановки ленты</p>
         </div>
     </div>
 
@@ -340,99 +330,103 @@
             { name: "Snoop Dogg", probability: 0.01, image: "gift13.png" }
         ];
 
-        const wheel = document.getElementById('wheel');
+        const rouletteTrack = document.getElementById('rouletteTrack');
         const spinButton = document.getElementById('spinButton');
         const prizeDisplay = document.getElementById('prizeDisplay');
         const prizeName = document.getElementById('prizeName');
         const prizeImageLarge = document.getElementById('prizeImageLarge');
         const loading = document.getElementById('loading');
-
-        // Create wheel items
-        function createWheelItems() {
-            wheel.innerHTML = '';
-            
-            prizes.forEach((prize, index) => {
-                const angle = (360 / prizes.length) * index;
-                const item = document.createElement('div');
-                item.className = 'wheel-item';
-                item.style.transform = `rotate(${angle}deg)`;
-                
-                // Create background color based on index
-                const hue = (index * 360 / prizes.length);
-                item.style.background = `linear-gradient(${angle}deg, hsla(${hue}, 80%, 45%, 0.9), hsla(${hue}, 80%, 35%, 0.9))`;
-                
-                // Create image element for the prize
-                const img = document.createElement('img');
-                img.className = 'prize-image';
-                img.src = `images/${prize.image}`;
-                img.alt = prize.name;
-                
-                // Create text element
-                const text = document.createElement('div');
-                text.textContent = prize.name;
-                
-                item.appendChild(img);
-                item.appendChild(text);
-                wheel.appendChild(item);
-            });
-            
-            // Add center circle
-            const center = document.createElement('div');
-            center.style.position = 'absolute';
-            center.style.top = '50%';
-            center.style.left = '50%';
-            center.style.transform = 'translate(-50%, -50%)';
-            center.style.width = '70px';
-            center.style.height = '70px';
-            center.style.background = 'linear-gradient(45deg, #ff9d00, #ffce76)';
-            center.style.borderRadius = '50%';
-            center.style.boxShadow = '0 0 15px rgba(255, 157, 0, 0.7)';
-            center.style.zIndex = '5';
-            center.style.display = 'flex';
-            center.style.alignItems = 'center';
-            center.style.justifyContent = 'center';
-            center.style.fontSize = '30px';
-            center.innerHTML = '🎰';
-            
-            wheel.appendChild(center);
-        }
+        const speedValue = document.getElementById('speedValue');
 
         let isSpinning = false;
+        let animationId = null;
+        let currentSpeed = 5;
+        let currentPosition = 0;
+        let targetPrize = null;
 
-        spinButton.addEventListener('click', async () => {
+        // Create roulette items with infinite loop effect
+        function createRouletteItems() {
+            rouletteTrack.innerHTML = '';
+            
+            // Create multiple copies for seamless infinite effect
+            for (let copy = 0; copy < 3; copy++) {
+                prizes.forEach((prize, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'roulette-item';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'prize-image';
+                    img.src = `images/${prize.image}`;
+                    img.alt = prize.name;
+                    
+                    const text = document.createElement('div');
+                    text.className = 'prize-name';
+                    text.textContent = prize.name;
+                    
+                    item.appendChild(img);
+                    item.appendChild(text);
+                    rouletteTrack.appendChild(item);
+                });
+            }
+        }
+
+        function startSpinning() {
             if (isSpinning) return;
             
             isSpinning = true;
             spinButton.disabled = true;
             prizeDisplay.style.display = 'none';
-
+            
             // Select random prize based on probability
-            const randomPrize = selectPrize();
+            targetPrize = selectPrize();
             
-            // Calculate rotation (multiple full rotations + prize position)
-            const fullRotations = 5 + Math.floor(Math.random() * 3);
-            const prizeIndex = prizes.findIndex(p => p.name === randomPrize.name);
-            const prizeAngle = (360 / prizes.length) * prizeIndex;
-            const totalRotation = (fullRotations * 360) + (360 - prizeAngle) + 180;
+            // Calculate target position (center of the target prize)
+            const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
+            const targetPosition = -(targetIndex * 120 + 60); // 120px per item, 60px to center
             
-            // Apply spinning animation
-            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            // Add some random offset for natural feel
+            const randomOffset = (Math.random() - 0.5) * 240;
+            const finalTargetPosition = targetPosition + randomOffset - (120 * prizes.length * 2);
             
-            // Create confetti effect
-            createConfetti();
+            // Start animation
+            animateRoulette(finalTargetPosition);
+        }
+
+        function animateRoulette(targetPosition) {
+            const startPosition = currentPosition;
+            const startTime = performance.now();
+            const duration = 4000; // 4 seconds
             
-            // Show prize after animation
-            setTimeout(() => {
-                prizeName.textContent = randomPrize.name;
-                prizeImageLarge.src = `images/${randomPrize.image}`;
-                prizeDisplay.style.display = 'block';
+            function updateAnimation(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
                 
-                // Send data to Telegram
-                loading.style.display = 'block';
-                sendPrizeToTelegram(randomPrize);
-            }, 4000);
-        });
+                // Easing function for smooth deceleration
+                const easing = 1 - Math.pow(1 - progress, 3);
+                
+                currentPosition = startPosition + (targetPosition - startPosition) * easing;
+                rouletteTrack.style.transform = `translateX(${currentPosition}px)`;
+                
+                if (progress < 1) {
+                    animationId = requestAnimationFrame(updateAnimation);
+                } else {
+                    // Animation complete
+                    isSpinning = false;
+                    spinButton.disabled = false;
+                    
+                    // Show prize
+                    prizeName.textContent = targetPrize.name;
+                    prizeImageLarge.src = `images/${targetPrize.image}`;
+                    prizeDisplay.style.display = 'block';
+                    
+                    // Send data to Telegram
+                    loading.style.display = 'block';
+                    sendPrizeToTelegram(targetPrize);
+                }
+            }
+            
+            animationId = requestAnimationFrame(updateAnimation);
+        }
 
         function selectPrize() {
             const random = Math.random() * 100;
@@ -446,46 +440,6 @@
             }
             
             return prizes[0]; // Fallback
-        }
-
-        function createConfetti() {
-            for (let i = 0; i < 60; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Random confetti shapes
-                const shapes = ['square', 'circle', 'rectangle', 'triangle'];
-                const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                
-                if (shape === 'square') {
-                    confetti.style.width = '12px';
-                    confetti.style.height = '12px';
-                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                } else if (shape === 'circle') {
-                    confetti.style.width = '12px';
-                    confetti.style.height = '12px';
-                    confetti.style.borderRadius = '50%';
-                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                } else if (shape === 'rectangle') {
-                    confetti.style.width = '8px';
-                    confetti.style.height = '16px';
-                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                } else if (shape === 'triangle') {
-                    confetti.style.width = '0';
-                    confetti.style.height = '0';
-                    confetti.style.borderLeft = '8px solid transparent';
-                    confetti.style.borderRight = '8px solid transparent';
-                    confetti.style.borderBottom = `16px solid hsl(${Math.random() * 360}, 100%, 60%)`;
-                    confetti.style.background = 'transparent';
-                }
-                
-                confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 4000);
-            }
         }
 
         function sendPrizeToTelegram(prize) {
@@ -518,43 +472,16 @@
             }
         }
 
-        // Reset wheel after animation
-        wheel.addEventListener('transitionend', () => {
-            isSpinning = false;
-            spinButton.disabled = false;
-            
-            // Reset wheel position (keep visual position but reset transform for next spin)
-            const computedStyle = window.getComputedStyle(wheel);
-            const matrix = new DOMMatrixReadOnly(computedStyle.transform);
-            const currentRotation = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
-            
-            wheel.style.transition = 'none';
-            wheel.style.transform = `rotate(${currentRotation % 360}deg)`;
-            
-            // Force reflow
-            void wheel.offsetWidth;
-        });
-
-        // Create background stars
-        function createStars() {
-            const effectsContainer = document.querySelector('.background-effects');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.top = Math.random() * 100 + '%';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                star.style.animationDuration = 3 + Math.random() * 7 + 's';
-                effectsContainer.appendChild(star);
-            }
-        }
-
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            createWheelItems();
-            createStars();
+            createRouletteItems();
+            
+            // Set initial position to middle of the track
+            currentPosition = -(120 * prizes.length);
+            rouletteTrack.style.transform = `translateX(${currentPosition}px)`;
+            
+            // Add event listener to spin button
+            spinButton.addEventListener('click', startSpinning);
             
             // Preload images
             prizes.forEach(prize => {
