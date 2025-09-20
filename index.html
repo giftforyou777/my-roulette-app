@@ -389,6 +389,7 @@
         let animationId = null;
         let currentPosition = 0;
         let targetPrize = null;
+        let totalCopies = 8; // Увеличили количество копий
 
         // Preload all images first
         function preloadImages() {
@@ -415,8 +416,8 @@
         function createRouletteItems() {
             rouletteTrack.innerHTML = '';
             
-            // Create 4 copies for seamless looping
-            for (let copy = 0; copy < 4; copy++) {
+            // Create multiple copies for seamless animation
+            for (let copy = 0; copy < totalCopies; copy++) {
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
                     item.className = 'roulette-item';
@@ -459,7 +460,7 @@
             const totalItems = rouletteTrack.children.length;
             const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
             
-            // Calculate target position
+            // Calculate target position - ensure it's within the track
             const targetPosition = -(totalItems * 140 / 2 + (targetIndex * 140) + 70 + (extraRotations * prizes.length * 140));
             
             // Use requestAnimationFrame for smooth animation
