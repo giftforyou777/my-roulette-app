@@ -3,563 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎰 Рулетка Удачи</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>РУЛЕТКА УДАЧИ</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
-
+        
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #0c0c21 0%, #1a1a3a 50%, #2d2d5a 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             padding: 20px;
-            color: white;
-            overflow-x: hidden;
         }
-
+        
         .container {
-            background: linear-gradient(145deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.9));
-            border-radius: 25px;
-            padding: 35px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7),
-                        0 0 0 2px rgba(255, 215, 0, 0.2),
-                        0 0 40px rgba(255, 215, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
             max-width: 500px;
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+            padding: 30px;
+            text-align: center;
         }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
-            animation: rotateBackground 15s linear infinite;
-            pointer-events: none;
+        
+        h1 {
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            font-size: 28px;
         }
-
-        .header {
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 2;
+        
+        .separator {
+            height: 3px;
+            background: linear-gradient(to right, transparent, #d4af37, transparent);
+            margin: 20px 0;
         }
-
-        .title {
-            font-size: 38px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            background: linear-gradient(45deg, #ffd700, #ff9d00, #ff6b00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 20px rgba(255, 157, 0, 0.5);
-            letter-spacing: 1.5px;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            color: #d0d0ff;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-        }
-
+        
         .roulette-container {
             position: relative;
-            margin: 35px 0;
-            height: 220px;
-            overflow: hidden;
-            border-radius: 20px;
-            background: linear-gradient(145deg, rgba(0, 0, 0, 0.5), rgba(40, 40, 80, 0.4));
-            border: 3px solid rgba(255, 215, 0, 0.4);
-            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6),
-                        0 15px 30px rgba(0, 0, 0, 0.5);
-            z-index: 2;
+            margin: 30px auto;
+            width: 300px;
+            height: 300px;
         }
-
-        .roulette-track {
-            display: flex;
-            position: absolute;
+        
+        .roulette-wheel {
+            width: 100%;
             height: 100%;
-            left: 0;
-            will-change: transform;
-        }
-
-        .roulette-item {
-            width: 140px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.15));
-            border-right: 2px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff9999 0deg 36deg,
+                #99ff99 36deg 72deg,
+                #9999ff 72deg 108deg,
+                #ffff99 108deg 144deg,
+                #ff99ff 144deg 180deg,
+                #99ffff 180deg 216deg,
+                #ffcc99 216deg 252deg,
+                #cc99ff 252deg 288deg,
+                #99ccff 288deg 324deg,
+                #ffcc66 324deg 360deg
+            );
             position: relative;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            overflow: hidden;
+            box-shadow: 0 0 0 8px #d4af37, 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
-
-        .roulette-item::before {
-            content: '';
+        
+        .roulette-center {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            bottom: 8px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #d4af37;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
         }
-
-        .roulette-item:nth-child(2n) {
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 69, 0, 0.15));
+        
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 40px;
+            background: #ff3333;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 20;
         }
-
-        .prize-image {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.7));
-            -webkit-backface-visibility: hidden;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-        }
-
-        .prize-name {
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            color: #ffdd99;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
-            background: linear-gradient(45deg, #ffd700, #ffa500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 4px 12px;
-            border-radius: 12px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .center-indicator {
+        
+        .prize-item {
             position: absolute;
             top: 0;
             left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 100%;
-            background: linear-gradient(to bottom, 
-                transparent, 
-                #ff3366, 
-                #ff3366, 
-                transparent);
-            z-index: 10;
-            box-shadow: 0 0 25px rgba(255, 51, 102, 0.9);
+            width: 40%;
+            transform-origin: bottom center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 15px;
         }
-
-        .center-indicator::before {
-            content: '▼';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 28px;
-            color: #ff3366;
-            text-shadow: 0 0 20px rgba(255, 51, 102, 1);
+        
+        .prize-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .prize-text {
+            font-size: 10px;
             font-weight: bold;
+            text-align: center;
+            color: #333;
+            text-shadow: 0 0 2px white;
+            transform: rotate(90deg);
+            width: 70px;
         }
-
-        .center-indicator::after {
-            content: '▲';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 28px;
-            color: #ff3366;
-            text-shadow: 0 0 20px rgba(255, 51, 102, 1);
-            font-weight: bold;
-        }
-
+        
         .spin-button {
-            background: linear-gradient(145deg, #ff9d00, #ff6b00);
-            border: none;
-            padding: 20px 60px;
-            font-size: 22px;
-            font-weight: 800;
+            background: linear-gradient(to bottom, #d4af37, #a2850f);
             color: white;
-            border-radius: 65px;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
             cursor: pointer;
-            margin-top: 35px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(255, 157, 0, 0.6),
-                        0 0 0 3px rgba(255, 215, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-            letter-spacing: 1px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
         }
-
-        .spin-button:hover::before {
-            opacity: 1;
+        
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-
+        
         .spin-button:active {
-            transform: translateY(3px);
-            box-shadow: 0 5px 20px rgba(255, 157, 0, 0.5);
+            transform: translateY(1px);
         }
-
+        
         .spin-button:disabled {
-            background: linear-gradient(145deg, #555, #333);
-            transform: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to bottom, #cccccc, #999999);
             cursor: not-allowed;
         }
-
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
         .prize-display {
-            margin-top: 35px;
-            padding: 30px;
-            background: linear-gradient(145deg, rgba(50, 50, 100, 0.7), rgba(30, 30, 60, 0.7));
-            border-radius: 25px;
-            display: none;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            animation: prizeAppear 0.8s ease;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            position: relative;
-            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-
-        .prize-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #00ffcc, #00ccff, #0099ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
-        }
-
-        .prize-name-large {
+        
+        .prize-image {
             font-size: 32px;
-            font-weight: 800;
-            margin: 20px 0;
-            background: linear-gradient(45deg, #ffd700, #ffa500, #ff8c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(255, 206, 118, 0.6);
         }
-
-        .prize-image-large {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            margin: 25px auto;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7));
-            animation: float 3s ease-in-out infinite;
-            -webkit-backface-visibility: hidden;
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
-
-        .loading {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #ff9d00;
-            border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-            margin: 0 auto;
-            box-shadow: 0 0 25px rgba(255, 157, 0, 0.5);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes prizeAppear {
-            0% { 
-                opacity: 0; 
-                transform: translateY(50px) scale(0.8) rotate(-5deg);
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0) scale(1) rotate(0deg);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0px) rotate(0deg) scale(1);
-            }
-            50% { 
-                transform: translateY(-15px) rotate(8deg) scale(1.1);
-            }
-        }
-
-        @keyframes rotateBackground {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .instructions {
-            margin-top: 30px;
-            font-size: 16px;
-            color: #a0a0ff;
-            line-height: 1.6;
-            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        
+        .win-animation {
+            animation: blink 0.5s infinite;
+            color: #ff3333;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
-            <p class="subtitle">Крутите ленту и выигрывайте призы!</p>
-        </div>
-
+        <h1>РУЛЕТКА УДАЧИ</h1>
+        <p>Крутите ленту и выигрывайте призы!</p>
+        
+        <div class="separator"></div>
+        
         <div class="roulette-container">
-            <div class="center-indicator"></div>
-            <div class="roulette-track" id="rouletteTrack">
-                <!-- Roulette items will be generated by JavaScript -->
+            <div class="pointer"></div>
+            <div class="roulette-wheel" id="roulette-wheel">
+                <!-- Призы будут добавлены через JavaScript -->
             </div>
+            <div class="roulette-center">SPIN</div>
         </div>
-
-        <button class="spin-button" id="spinButton">🎰 КРУТИТЬ РУЛЕТКУ</button>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p style="margin-top: 20px; color: #ffcc99; font-size: 16px;">Отправка приза...</p>
-        </div>
-
-        <div class="prize-display" id="prizeDisplay">
-            <div class="prize-title">🎉 ПОЗДРАВЛЯЕМ!</div>
-            <img class="prize-image-large" id="prizeImageLarge" src="" alt="Приз">
-            <div class="prize-name-large" id="prizeName"></div>
-            <p style="color: #ccccff; font-size: 16px; margin-top: 15px;">Ваш приз скоро будет зачислен</p>
-        </div>
-
-        <div class="instructions">
-            <p>Нажмите "Крутить рулетку" и наслаждайтесь анимацией!</p>
+        
+        <button class="spin-button" id="spin-button">КРУТИТЬ РУЛЕТКУ</button>
+        
+        <div class="result">
+            <div class="result-title">ПОЗДРАВЛЯЕМ!</div>
+            <div class="prize-display">
+                <span class="prize-image">🎁</span>
+                <span id="prize-name">Ваш приз появится здесь</span>
+            </div>
         </div>
     </div>
 
     <script>
-        const prizes = [
-            { name: "10 монет", probability: 99.88, image: "gift1.png" },
-            { name: "100 монет", probability: 0.01, image: "gift2.png" },
-            { name: "50 монет", probability: 0.01, image: "gift3.png" },
-            { name: "Evil Eye", probability: 0.01, image: "gift4.png" },
-            { name: "Berry Box", probability: 0.01, image: "gift5.png" },
-            { name: "Vintage Cigar", probability: 0.01, image: "gift6.png" },
-            { name: "Lol Pop", probability: 0.01, image: "gift7.png" },
-            { name: "Lol Pop", probability: 0.01, image: "gift8.png" },
-            { name: "Ginger Cookie", probability: 0.01, image: "gift9.png" },
-            { name: "Swiss Watch", probability: 0.01, image: "gift10.png" },
-            { name: "Heroic Helmet", probability: 0.01, image: "gift11.png" },
-            { name: "Jolly Chimp", probability: 0.01, image: "gift12.png" },
-            { name: "Snoop Dogg", probability: 0.01, image: "gift13.png" }
-        ];
-
-        const rouletteTrack = document.getElementById('rouletteTrack');
-        const spinButton = document.getElementById('spinButton');
-        const prizeDisplay = document.getElementById('prizeDisplay');
-        const prizeName = document.getElementById('prizeName');
-        const prizeImageLarge = document.getElementById('prizeImageLarge');
-        const loading = document.getElementById('loading');
-
-        let isSpinning = false;
-        let animationId = null;
-        let currentPosition = 0;
-        let targetPrize = null;
-
-        // Preload all images first
-        function preloadImages() {
-            return new Promise((resolve) => {
-                let loaded = 0;
-                const total = prizes.length;
+        document.addEventListener('DOMContentLoaded', function() {
+            const rouletteWheel = document.getElementById('roulette-wheel');
+            const spinButton = document.getElementById('spin-button');
+            const prizeName = document.getElementById('prize-name');
+            
+            // Список призов с иконками
+            const prizes = [
+                { name: "100 МОНЕТ", icon: "🪙" },
+                { name: "500 МОНЕТ", icon: "💰" },
+                { name: "БОНУСНЫЙ ПРИЗ", icon: "🎁" },
+                { name: "СКИДКА 50%", icon: "🏷️" },
+                { name: "ФИРМЕННЫЙ СУВЕНИР", icon: "🎯" },
+                { name: "ГЛАВНЫЙ ПРИЗ", icon: "🏆" },
+                { name: "ПРОМОКОД", icon: "🎫" },
+                { name: "ПОДАРОК", icon: "🎁" },
+                { name: "СЮРПРИЗ", icon: "🎉" },
+                { name: "ДЖЕКПОТ", icon: "💎" }
+            ];
+            
+            // Создаем секции рулетки с призами
+            prizes.forEach((prize, index) => {
+                const angle = (360 / prizes.length) * index;
+                const prizeItem = document.createElement('div');
+                prizeItem.className = 'prize-item';
+                prizeItem.style.transform = `rotate(${angle}deg)`;
                 
-                prizes.forEach(prize => {
-                    const img = new Image();
-                    img.onload = () => {
-                        loaded++;
-                        if (loaded === total) resolve();
-                    };
-                    img.onerror = () => {
-                        loaded++;
-                        if (loaded === total) resolve();
-                    };
-                    img.src = `images/${prize.image}`;
-                });
+                prizeItem.innerHTML = `
+                    <div class="prize-icon">${prize.icon}</div>
+                    <div class="prize-text">${prize.name}</div>
+                `;
+                
+                rouletteWheel.appendChild(prizeItem);
             });
-        }
-
-        // Create roulette items after images are preloaded
-        function createRouletteItems() {
-            rouletteTrack.innerHTML = '';
             
-            // Create only 2 copies for better performance
-            for (let copy = 0; copy < 2; copy++) {
-                prizes.forEach((prize, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'roulette-item';
-                    
-                    const img = document.createElement('img');
-                    img.className = 'prize-image';
-                    img.src = `images/${prize.image}`;
-                    img.alt = prize.name;
-                    // Force hardware acceleration
-                    img.style.transform = 'translateZ(0)';
-                    img.style.backfaceVisibility = 'hidden';
-                    
-                    const text = document.createElement('div');
-                    text.className = 'prize-name';
-                    text.textContent = prize.name;
-                    text.style.transform = 'translateZ(0)';
-                    
-                    item.appendChild(img);
-                    item.appendChild(text);
-                    rouletteTrack.appendChild(item);
-                });
-            }
-        }
-
-        function startSpinning() {
-            if (isSpinning) return;
+            let isSpinning = false;
             
-            isSpinning = true;
-            spinButton.disabled = true;
-            prizeDisplay.style.display = 'none';
-            
-            // Select random prize based on probability
-            targetPrize = selectPrize();
-            
-            // Moderate spinning
-            const extraRotations = 5;
-            const totalItems = prizes.length * 2;
-            const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
-            
-            // Calculate target position
-            const targetPosition = -(totalItems * 140 / 2 + (targetIndex * 140) + 70 + (extraRotations * prizes.length * 140));
-            
-            // Use requestAnimationFrame for smooth animation
-            animateRoulette(targetPosition);
-        }
-
-        function animateRoulette(targetPosition) {
-            const startPosition = currentPosition;
-            const startTime = performance.now();
-            const duration = 3500;
-            
-            function updateAnimation(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+            spinButton.addEventListener('click', function() {
+                if (isSpinning) return;
                 
-                // Smooth easing function
-                const easing = progress < 0.8 
-                    ? progress * 1.2 
-                    : 0.96 + (progress - 0.8) * 0.2;
+                isSpinning = true;
+                spinButton.disabled = true;
+                prizeName.textContent = "Крутим...";
+                prizeName.classList.remove('win-animation');
                 
-                currentPosition = startPosition + (targetPosition - startPosition) * easing;
+                // Случайный угол поворота (несколько полных оборотов + случайный приз)
+                const fullRotations = 5; // Количество полных оборотов
+                const prizeIndex = Math.floor(Math.random() * prizes.length);
+                const prizeAngle = prizeIndex * (360 / prizes.length);
+                const totalRotation = 360 * fullRotations + 360 - prizeAngle;
                 
-                // Use transform for better performance
-                rouletteTrack.style.transform = `translate3d(${currentPosition}px, 0, 0)`;
+                // Вращаем рулетку
+                rouletteWheel.style.transform = `rotate(${totalRotation}deg)`;
                 
-                if (progress < 1) {
-                    animationId = requestAnimationFrame(updateAnimation);
-                } else {
-                    finishSpin();
-                }
-            }
-            
-            animationId = requestAnimationFrame(updateAnimation);
-        }
-
-        function finishSpin() {
-            isSpinning = false;
-            spinButton.disabled = false;
-            
-            // Show prize
-            prizeName.textContent = targetPrize.name;
-            prizeImageLarge.src = `images/${targetPrize.image}`;
-            prizeDisplay.style.display = 'block';
-            
-            // Send data to Telegram
-            loading.style.display = 'block';
-            sendPrizeToTelegram(targetPrize);
-        }
-
-        function selectPrize() {
-            const random = Math.random() * 100;
-            let cumulativeProbability = 0;
-            
-            for (const prize of prizes) {
-                cumulativeProbability += prize.probability;
-                if (random <= cumulativeProbability) {
-                    return prize;
-                }
-            }
-            
-            return prizes[0];
-        }
-
-        function sendPrizeToTelegram(prize) {
-            try {
-                if (window.Telegram && window.Telegram.WebApp) {
-                    const webApp = window.Telegram.WebApp;
+                // Ждем завершения вращения
+                setTimeout(() => {
+                    // Показываем выигрыш
+                    prizeName.textContent = prizes[prizeIndex].name;
+                    prizeName.classList.add('win-animation');
                     
-                    const prizeData = {
-                        prize_name: prize.name,
-                        prize_image: prize.image
-                    };
-                    
-                    webApp.sendData(JSON.stringify(prizeData));
-                    
-                    setTimeout(() => {
-                        webApp.close();
-                    }, 1500);
-                } else {
-                    setTimeout(() => {
-                        loading.style.display = 'none';
-                    }, 2000);
-                }
-            } catch (error) {
-                console.error('Error sending prize:', error);
-                loading.style.display = 'none';
-            }
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Preload images first
-            await preloadImages();
-            
-            // Then create roulette items
-            createRouletteItems();
-            
-            // Set initial position
-            currentPosition = -(prizes.length * 140);
-            rouletteTrack.style.transform = `translate3d(${currentPosition}px, 0, 0)`;
-            
-            // Add event listener
-            spinButton.addEventListener('click', startSpinning);
+                    isSpinning = false;
+                    spinButton.disabled = false;
+                }, 3000);
+            });
         });
     </script>
 </body>
