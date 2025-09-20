@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎰 Рулетка Удачи</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -26,17 +26,16 @@
         }
 
         .container {
-            background: linear-gradient(145deg, rgba(30, 30, 60, 0.8), rgba(20, 20, 40, 0.8));
-            backdrop-filter: blur(15px);
+            background: linear-gradient(145deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.9));
             border-radius: 25px;
             padding: 35px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6),
-                        0 0 0 1px rgba(255, 215, 0, 0.1),
-                        0 0 30px rgba(255, 215, 0, 0.2);
-            max-width: 520px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7),
+                        0 0 0 2px rgba(255, 215, 0, 0.2),
+                        0 0 40px rgba(255, 215, 0, 0.3);
+            max-width: 500px;
             width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -48,8 +47,8 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
-            animation: rotateBackground 20s linear infinite;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            animation: rotateBackground 15s linear infinite;
             pointer-events: none;
         }
 
@@ -60,34 +59,34 @@
         }
 
         .title {
-            font-size: 36px;
+            font-size: 38px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             background: linear-gradient(45deg, #ffd700, #ff9d00, #ff6b00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(255, 157, 0, 0.4);
-            letter-spacing: 1px;
+            text-shadow: 0 5px 20px rgba(255, 157, 0, 0.5);
+            letter-spacing: 1.5px;
         }
 
         .subtitle {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 400;
             color: #d0d0ff;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
         }
 
         .roulette-container {
             position: relative;
             margin: 35px 0;
-            height: 200px;
+            height: 220px;
             overflow: hidden;
             border-radius: 20px;
-            background: linear-gradient(145deg, rgba(0, 0, 0, 0.4), rgba(40, 40, 80, 0.3));
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5),
-                        0 10px 25px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.5), rgba(40, 40, 80, 0.4));
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6),
+                        0 15px 30px rgba(0, 0, 0, 0.5);
             z-index: 2;
         }
 
@@ -96,19 +95,19 @@
             position: absolute;
             height: 100%;
             left: 0;
-            transition: transform 0.5s cubic-bezier(0.21, 0.61, 0.35, 1);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
 
         .roulette-item {
-            width: 130px;
+            width: 140px;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.15));
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
             transition: all 0.3s ease;
             position: relative;
@@ -117,43 +116,44 @@
         .roulette-item::before {
             content: '';
             position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 10px;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
             pointer-events: none;
         }
 
         .roulette-item:nth-child(2n) {
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.15), rgba(255, 69, 0, 0.1));
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 69, 0, 0.15));
         }
 
         .prize-image {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
-            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.7));
+            transition: all 0.3s ease;
         }
 
         .roulette-item:hover .prize-image {
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 8px 20px rgba(255, 215, 0, 0.4));
         }
 
         .prize-name {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             text-align: center;
             color: #ffdd99;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
             background: linear-gradient(45deg, #ffd700, #ffa500);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            padding: 2px 8px;
-            border-radius: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
         }
 
         .center-indicator {
@@ -161,7 +161,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 6px;
+            width: 8px;
             height: 100%;
             background: linear-gradient(to bottom, 
                 transparent, 
@@ -169,67 +169,71 @@
                 #ff3366, 
                 transparent);
             z-index: 10;
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.7);
+            box-shadow: 0 0 25px rgba(255, 51, 102, 0.9);
         }
 
         .center-indicator::before {
             content: '▼';
             position: absolute;
-            top: -5px;
+            top: -8px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
+            font-size: 28px;
             color: #ff3366;
-            text-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+            text-shadow: 0 0 20px rgba(255, 51, 102, 1);
+            font-weight: bold;
         }
 
         .center-indicator::after {
             content: '▲';
             position: absolute;
-            bottom: -5px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
+            font-size: 28px;
             color: #ff3366;
-            text-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+            text-shadow: 0 0 20px rgba(255, 51, 102, 1);
+            font-weight: bold;
         }
 
         .spin-button {
             background: linear-gradient(145deg, #ff9d00, #ff6b00);
             border: none;
-            padding: 18px 50px;
-            font-size: 20px;
-            font-weight: 700;
+            padding: 20px 60px;
+            font-size: 22px;
+            font-weight: 800;
             color: white;
-            border-radius: 60px;
+            border-radius: 65px;
             cursor: pointer;
-            margin-top: 30px;
+            margin-top: 35px;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5),
-                        0 0 0 2px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 157, 0, 0.6),
+                        0 0 0 3px rgba(255, 215, 0, 0.4);
             position: relative;
             overflow: hidden;
             z-index: 2;
+            letter-spacing: 1px;
         }
 
         .spin-button::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
             background: linear-gradient(145deg, #ffce76, #ff9d00, #ffce76);
             z-index: -1;
-            border-radius: 60px;
+            border-radius: 70px;
             opacity: 0;
             transition: opacity 0.3s ease;
+            animation: buttonGlow 2s infinite;
         }
 
         .spin-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(255, 157, 0, 0.6),
-                        0 0 0 3px rgba(255, 215, 0, 0.4);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 15px 40px rgba(255, 157, 0, 0.8),
+                        0 0 0 4px rgba(255, 215, 0, 0.5);
         }
 
         .spin-button:hover::before {
@@ -237,74 +241,73 @@
         }
 
         .spin-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 4px 15px rgba(255, 157, 0, 0.4);
+            transform: translateY(3px);
+            box-shadow: 0 5px 20px rgba(255, 157, 0, 0.5);
         }
 
         .spin-button:disabled {
             background: linear-gradient(145deg, #555, #333);
             transform: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             cursor: not-allowed;
         }
 
         .prize-display {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(145deg, rgba(50, 50, 100, 0.6), rgba(30, 30, 60, 0.6));
-            border-radius: 20px;
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(50, 50, 100, 0.7), rgba(30, 30, 60, 0.7));
+            border-radius: 25px;
             display: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeIn 0.6s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            animation: prizeAppear 0.8s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 2;
         }
 
         .prize-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #00ffcc, #00ccff);
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffcc, #00ccff, #0099ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 3px 10px rgba(0, 204, 255, 0.4);
+            text-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
         }
 
         .prize-name-large {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ffdd99;
-            text-shadow: 0 3px 10px rgba(255, 206, 118, 0.5);
-            margin: 15px 0;
-            background: linear-gradient(45deg, #ffd700, #ffa500);
+            font-size: 32px;
+            font-weight: 800;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #ffd700, #ffa500, #ff8c00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(255, 206, 118, 0.6);
         }
 
         .prize-image-large {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            margin: 20px auto;
-            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6));
+            margin: 25px auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7));
             animation: float 3s ease-in-out infinite;
         }
 
         .loading {
             display: none;
-            margin-top: 25px;
+            margin-top: 30px;
         }
 
         .spinner {
-            width: 45px;
-            height: 45px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid #ff9d00;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #ff9d00;
             border-radius: 50%;
-            animation: spin 1.2s linear infinite;
+            animation: spin 1.5s linear infinite;
             margin: 0 auto;
-            box-shadow: 0 0 20px rgba(255, 157, 0, 0.4);
+            box-shadow: 0 0 25px rgba(255, 157, 0, 0.5);
         }
 
         @keyframes spin {
@@ -312,14 +315,24 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes prizeAppear {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.8) rotate(-5deg);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+            }
+            50% { 
+                transform: translateY(-15px) rotate(8deg) scale(1.1);
+            }
         }
 
         @keyframes rotateBackground {
@@ -327,22 +340,27 @@
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes buttonGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
         .instructions {
-            margin-top: 25px;
-            font-size: 15px;
+            margin-top: 30px;
+            font-size: 16px;
             color: #a0a0ff;
             line-height: 1.6;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
         }
 
         .confetti {
             position: fixed;
-            width: 15px;
-            height: 15px;
+            width: 18px;
+            height: 18px;
             opacity: 0;
             pointer-events: none;
             z-index: 100;
-            animation: confettiFall 3s ease-in forwards;
+            animation: confettiFall 4s ease-out forwards;
         }
 
         @keyframes confettiFall {
@@ -351,7 +369,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(720deg) scale(1);
+                transform: translateY(100vh) rotate(1080deg) scale(1.2);
                 opacity: 0;
             }
         }
@@ -375,14 +393,14 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="margin-top: 15px; color: #ffcc99;">Отправка приза...</p>
+            <p style="margin-top: 20px; color: #ffcc99; font-size: 16px;">Отправка приза...</p>
         </div>
 
         <div class="prize-display" id="prizeDisplay">
             <div class="prize-title">🎉 ПОЗДРАВЛЯЕМ!</div>
             <img class="prize-image-large" id="prizeImageLarge" src="" alt="Приз">
             <div class="prize-name-large" id="prizeName"></div>
-            <p style="color: #ccccff;">Ваш приз скоро будет зачислен</p>
+            <p style="color: #ccccff; font-size: 16px; margin-top: 15px;">Ваш приз скоро будет зачислен</p>
         </div>
 
         <div class="instructions">
@@ -456,31 +474,39 @@
             // Select random prize based on probability
             targetPrize = selectPrize();
             
-            // Add more rotations for dramatic effect
-            const extraRotations = 10; // 10 дополнительных "кругов"
-            const totalItems = prizes.length * 5; // Всего элементов в track
+            // Dramatic spinning with many rotations
+            const extraRotations = 15; // 15 дополнительных кругов!
+            const totalItems = prizes.length * 5;
             const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
             
-            // Calculate target position with dramatic spinning
-            const targetPosition = -(totalItems * 130 / 2 + (targetIndex * 130) + 65 + (extraRotations * prizes.length * 130));
+            // Calculate massive spinning distance
+            const targetPosition = -(totalItems * 140 / 2 + (targetIndex * 140) + 70 + (extraRotations * prizes.length * 140));
             
-            // Start animation with improved easing
+            // Start super spin animation
             animateRoulette(targetPosition);
         }
 
         function animateRoulette(targetPosition) {
             const startPosition = currentPosition;
             const startTime = performance.now();
-            const duration = 5000; // Увеличил время анимации до 5 секунд
+            const duration = 6000; // 6 секунд кручения!
             
             function updateAnimation(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Improved easing function for more dramatic effect
-                const easing = progress < 0.8 
-                    ? progress * 1.2 // Быстрое вращение в начале
-                    : 0.96 + (progress - 0.8) * 0.2; // Медленное замедление в конце
+                // Super dramatic easing function
+                let easing;
+                if (progress < 0.7) {
+                    // Fast spinning phase
+                    easing = progress * 1.4;
+                } else if (progress < 0.9) {
+                    // Slow down phase
+                    easing = 0.98 + (progress - 0.7) * 0.1;
+                } else {
+                    // Final slow phase
+                    easing = 0.99 + (progress - 0.9) * 0.1;
+                }
                 
                 currentPosition = startPosition + (targetPosition - startPosition) * easing;
                 rouletteTrack.style.transform = `translateX(${currentPosition}px)`;
@@ -488,7 +514,6 @@
                 if (progress < 1) {
                     animationId = requestAnimationFrame(updateAnimation);
                 } else {
-                    // Animation complete
                     finishSpin();
                 }
             }
@@ -505,7 +530,7 @@
             prizeImageLarge.src = `images/${targetPrize.image}`;
             prizeDisplay.style.display = 'block';
             
-            // Create confetti effect
+            // Create massive confetti effect
             createConfetti();
             
             // Send data to Telegram
@@ -514,15 +539,16 @@
         }
 
         function createConfetti() {
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 80; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
                 document.body.appendChild(confetti);
                 
-                setTimeout(() => confetti.remove(), 3000);
+                setTimeout(() => confetti.remove(), 4000);
             }
         }
 
@@ -554,12 +580,12 @@
                     
                     setTimeout(() => {
                         webApp.close();
-                    }, 2000);
+                    }, 2500);
                 } else {
                     console.log('Prize won:', prize.name);
                     setTimeout(() => {
                         loading.style.display = 'none';
-                    }, 2500);
+                    }, 3000);
                 }
             } catch (error) {
                 console.error('Error sending prize:', error);
@@ -571,8 +597,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             createRouletteItems();
             
-            // Set initial position to middle of the track
-            currentPosition = -(prizes.length * 130 * 2.5);
+            // Set initial position
+            currentPosition = -(prizes.length * 140 * 2.5);
             rouletteTrack.style.transform = `translateX(${currentPosition}px)`;
             
             // Add event listener to spin button
