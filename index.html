@@ -3,570 +3,565 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎰 Горизонтальная Рулетка</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>🎰 Рулетка Удачи</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
             padding: 20px;
-            overflow: hidden;
+            color: white;
+            overflow-x: hidden;
         }
-        
+
         .container {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
             padding: 30px;
             text-align: center;
-            max-width: 400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            max-width: 420px;
             width: 100%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
         }
-        
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            color: #ffd700;
-            background: linear-gradient(45deg, #ffd700, #ff6b00);
+
+        .header {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #ffce76, #ff9d00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(255, 157, 0, 0.3);
         }
-        
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.85;
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
         .roulette-container {
             position: relative;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .wheel {
             width: 100%;
-            height: 180px;
-            margin: 20px auto;
-            overflow: hidden;
-            border-radius: 15px;
-            border: 3px solid #ffd700;
-            box-shadow: 
-                0 0 20px rgba(255, 215, 0, 0.6),
-                inset 0 0 30px rgba(0, 0, 0, 0.8);
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        }
-        
-        .roulette-track {
-            position: absolute;
-            top: 0;
-            left: 0;
             height: 100%;
-            display: flex;
-            align-items: center;
-            will-change: transform;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            border-radius: 50%;
+            box-shadow: 0 0 0 10px rgba(255, 157, 0, 0.2),
+                        inset 0 0 0 10px rgba(0, 0, 0, 0.3);
         }
-        
-        .roulette-item {
-            width: 120px;
-            height: 120px;
-            margin: 0 10px;
-            border-radius: 12px;
+
+        .wheel-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #2c2c2c 0%, #404040 100%);
-            border: 2px solid #ffd700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-        }
-        
-        .prize-image {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border: 2px solid #ffd700;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .prize-name {
-            font-size: 11px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 600;
             text-align: center;
-            color: #ffffff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            padding: 0 5px;
+            transform-origin: center;
+            backface-visibility: hidden;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
         }
-        
+
+        .prize-image {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        }
+
+        .pointer {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff3366, #ff3366);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 10;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+        }
+
+        .pointer::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 15px;
+            background: #ff3366;
+            border-radius: 50%;
+        }
+
         .spin-button {
-            background: linear-gradient(135deg, #ff6b00 0%, #ffd700 100%);
+            background: linear-gradient(45deg, #ff9d00, #ffce76);
             border: none;
-            padding: 16px 35px;
+            padding: 16px 45px;
             font-size: 18px;
-            font-weight: bold;
-            color: #000;
-            border-radius: 25px;
+            font-weight: 700;
+            color: #1a1a2e;
+            border-radius: 50px;
             cursor: pointer;
             margin-top: 25px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 20px rgba(255, 157, 0, 0.4);
+            letter-spacing: 0.5px;
         }
-        
-        .spin-button:hover:not(:disabled) {
+
+        .spin-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
         }
-        
+
+        .spin-button:active {
+            transform: translateY(1px);
+        }
+
         .spin-button:disabled {
-            background: linear-gradient(135deg, #555 0%, #777 100%);
+            background: #555;
             cursor: not-allowed;
-            opacity: 0.7;
+            transform: none;
+            box-shadow: none;
         }
-        
-        .pointer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-top: 20px solid transparent;
-            border-bottom: 20px solid transparent;
-            border-left: 25px solid #ffd700;
-            z-index: 10;
-            filter: drop-shadow(2px 0 6px rgba(0, 0, 0, 0.7));
-        }
-        
-        .result {
-            margin-top: 20px;
-            display: none;
-            background: rgba(0, 0, 0, 0.8);
+
+        .prize-display {
+            margin-top: 25px;
             padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #333;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             animation: fadeIn 0.5s ease;
         }
-        
-        .result-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 12px;
-            margin: 10px auto;
-            object-fit: contain;
-            border: 3px solid #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
+
         .prize-title {
-            font-size: 20px;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(45deg, #4ecdc4, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .prize-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffce76;
+            text-shadow: 0 2px 8px rgba(255, 206, 118, 0.4);
             margin: 10px 0;
-            color: #ffd700;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
         }
-        
-        .prize-description {
-            color: #ccc;
-            font-size: 14px;
-            margin: 10px 0;
+
+        .prize-image-large {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 15px auto;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
         }
-        
-        .claim-button {
-            background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
-            border: none;
-            padding: 14px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #000;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
-        }
-        
-        .claim-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.6);
-        }
-        
+
         .loading {
             display: none;
-            font-size: 16px;
             margin-top: 20px;
-            color: #ffd700;
-            animation: pulse 1s infinite;
         }
-        
-        .win-line {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 4px;
-            height: 140px;
-            background: linear-gradient(to bottom, transparent, #ffd700, transparent);
-            z-index: 5;
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ff9d00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
-        
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 157, 0, 0.2) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: pulse 4s infinite alternate;
+        }
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            0% { opacity: 0.3; transform: scale(0.9); }
+            100% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .instructions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
+    <div class="background-effects">
+        <div class="glow" style="top: 10%; left: 10%;"></div>
+        <div class="glow" style="top: 60%; right: 15%;"></div>
+    </div>
+
     <div class="container">
-        <h1>🎰 РУЛЕТКА</h1>
-        
+        <div class="header">
+            <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
+            <p class="subtitle">Крутите колесо и выигрывайте призы!</p>
+        </div>
+
         <div class="roulette-container">
-            <div class="win-line"></div>
             <div class="pointer"></div>
-            <div class="roulette-track" id="rouletteTrack">
-                <!-- Подарки будут добавлены через JavaScript -->
+            <div class="wheel-wrapper">
+                <div class="wheel" id="wheel">
+                    <!-- Wheel items will be generated by JavaScript -->
+                </div>
             </div>
         </div>
-        
-        <button class="spin-button" id="spinButton">🎯 КРУТИТЬ РУЛЕТКУ</button>
-        
+
+        <button class="spin-button" id="spinButton">🎰 КРУТИТЬ РУЛЕТКУ</button>
+
         <div class="loading" id="loading">
-            ⏳ Обработка результата...
+            <div class="spinner"></div>
+            <p style="margin-top: 10px;">Отправка приза...</p>
         </div>
-        
-        <div class="result" id="result">
-            <img class="result-image" id="resultImage" src="" alt="Приз">
-            <div class="prize-title" id="prizeName"></div>
-            <div class="prize-description" id="prizeDescription"></div>
-            <button class="claim-button" id="claimButton">✅ ЗАБРАТЬ ПРИЗ</button>
+
+        <div class="prize-display" id="prizeDisplay">
+            <div class="prize-title">🎉 ПОЗДРАВЛЯЕМ!</div>
+            <img class="prize-image-large" id="prizeImageLarge" src="" alt="Приз">
+            <div class="prize-name" id="prizeName"></div>
+            <p>Ваш приз скоро будет зачислен</p>
+        </div>
+
+        <div class="instructions">
+            <p>Нажмите "Крутить рулетку" и дождитесь остановки колеса</p>
         </div>
     </div>
 
     <script>
-        // Призы для рулетки
         const prizes = [
-            { 
-                name: "10 монет", 
-                image: "gift1.png", 
-                probability: 99.88,
-                description: "10 монет добавлены на ваш баланс!",
-                color: "linear-gradient(135deg, #4CAF50, #45a049)"
-            },
-            { 
-                name: "100 монет", 
-                image: "gift2.png", 
-                probability: 0.01,
-                description: "100 монет добавлены на ваш баланс!",
-                color: "linear-gradient(135deg, #FFD700, #FFA500)"
-            },
-            { 
-                name: "50 монет", 
-                image: "gift3.png", 
-                probability: 0.01,
-                description: "50 монет добавлены на ваш баланс!",
-                color: "linear-gradient(135deg, #2196F3, #1976D2)"
-            },
-            { 
-                name: "Evil Eye", 
-                image: "gift4.png", 
-                probability: 0.01,
-                description: "Эксклюзивный Evil Eye!",
-                color: "linear-gradient(135deg, #9C27B0, #7B1FA2)"
-            },
-            { 
-                name: "Berry Box", 
-                image: "gift5.png", 
-                probability: 0.01,
-                description: "Вкусная Berry Box!",
-                color: "linear-gradient(135deg, #E91E63, #C2185B)"
-            },
-            { 
-                name: "Vintage Cigar", 
-                image: "gift6.png", 
-                probability: 0.01,
-                description: "Роскошный Vintage Cigar!",
-                color: "linear-gradient(135deg, #795548, #5D4037)"
-            },
-            { 
-                name: "Lol Pop", 
-                image: "gift7.png", 
-                probability: 0.01,
-                description: "Сладкий Lol Pop!",
-                color: "linear-gradient(135deg, #FF5722, #D84315)"
-            },
-            { 
-                name: "Lol Pop", 
-                image: "gift8.png", 
-                probability: 0.01,
-                description: "Еще один сладкий Lol Pop!",
-                color: "linear-gradient(135deg, #FF9800, #F57C00)"
-            },
-            { 
-                name: "Ginger Cookie", 
-                image: "gift9.png", 
-                probability: 0.01,
-                description: "Ароматный Ginger Cookie!",
-                color: "linear-gradient(135deg, #607D8B, #455A64)"
-            },
-            { 
-                name: "Swiss Watch", 
-                image: "gift10.png", 
-                probability: 0.01,
-                description: "Элегантные Swiss Watch!",
-                color: "linear-gradient(135deg, #00BCD4, #0097A7)"
-            },
-            { 
-                name: "Heroic Helmet", 
-                image: "gift11.png", 
-                probability: 0.01,
-                description: "Легендарный Heroic Helmet!",
-                color: "linear-gradient(135deg, #3F51B5, #303F9F)"
-            },
-            { 
-                name: "Jolly Chimp", 
-                image: "gift12.png", 
-                probability: 0.01,
-                description: "Веселый Jolly Chimp!",
-                color: "linear-gradient(135deg, #CDDC39, #AFB42B)"
-            },
-            { 
-                name: "Snoop Dogg", 
-                image: "gift13.png", 
-                probability: 0.01,
-                description: "Эксклюзивный Snoop Dogg!",
-                color: "linear-gradient(135deg, #FFEB3B, #FBC02D)"
-            }
+            { name: "10 монет", probability: 99.88, image: "gift1.png" },
+            { name: "100 монет", probability: 0.01, image: "gift2.png" },
+            { name: "50 монет", probability: 0.01, image: "gift3.png" },
+            { name: "Evil Eye", probability: 0.01, image: "gift4.png" },
+            { name: "Berry Box", probability: 0.01, image: "gift5.png" },
+            { name: "Vintage Cigar", probability: 0.01, image: "gift6.png" },
+            { name: "Lol Pop", probability: 0.01, image: "gift7.png" },
+            { name: "Lol Pop", probability: 0.01, image: "gift8.png" },
+            { name: "Ginger Cookie", probability: 0.01, image: "gift9.png" },
+            { name: "Swiss Watch", probability: 0.01, image: "gift10.png" },
+            { name: "Heroic Helmet", probability: 0.01, image: "gift11.png" },
+            { name: "Jolly Chimp", probability: 0.01, image: "gift12.png" },
+            { name: "Snoop Dogg", probability: 0.01, image: "gift13.png" }
         ];
 
-        const ITEM_WIDTH = 140;
-        const CONTAINER_WIDTH = 400;
-        const BASE_SPEED = 30;
-        
-        let isSpinning = false;
-        let selectedPrize = null;
-        let currentPosition = 0;
-        let currentSpeed = BASE_SPEED;
-        let animationId = null;
-        let targetPrizeIndex = 0;
-        let startTimestamp = 0;
+        const wheel = document.getElementById('wheel');
+        const spinButton = document.getElementById('spinButton');
+        const prizeDisplay = document.getElementById('prizeDisplay');
+        const prizeName = document.getElementById('prizeName');
+        const prizeImageLarge = document.getElementById('prizeImageLarge');
+        const loading = document.getElementById('loading');
 
-        // Создание рулетки
-        function createRoulette() {
-            const track = document.getElementById('rouletteTrack');
-            track.innerHTML = '';
+        // Create wheel items
+        function createWheelItems() {
+            wheel.innerHTML = '';
             
-            for (let i = 0; i < prizes.length * 2; i++) {
-                const prizeIndex = i % prizes.length;
-                const prize = prizes[prizeIndex];
-                const item = createRouletteItem(prize);
-                track.appendChild(item);
-            }
-            
-            track.style.width = `${prizes.length * 2 * ITEM_WIDTH}px`;
-            track.style.transform = 'translateX(0px)';
-            currentPosition = 0;
-        }
-
-        function createRouletteItem(prize) {
-            const item = document.createElement('div');
-            item.className = 'roulette-item';
-            item.style.background = prize.color;
-            
-            const img = document.createElement('img');
-            img.className = 'prize-image';
-            img.src = `images/${prize.image}`;
-            img.alt = prize.name;
-            img.onerror = () => {
-                img.style.display = 'none';
+            prizes.forEach((prize, index) => {
+                const angle = (360 / prizes.length) * index;
+                const item = document.createElement('div');
+                item.className = 'wheel-item';
+                item.style.transform = `rotate(${angle}deg)`;
+                
+                // Create background color based on index
+                const hue = (index * 360 / prizes.length);
+                item.style.background = `linear-gradient(${angle}deg, hsla(${hue}, 80%, 45%, 0.9), hsla(${hue}, 80%, 35%, 0.9))`;
+                
+                // Create image element for the prize
+                const img = document.createElement('img');
+                img.className = 'prize-image';
+                img.src = `images/${prize.image}`;
+                img.alt = prize.name;
+                
+                // Create text element
                 const text = document.createElement('div');
-                text.className = 'prize-name';
                 text.textContent = prize.name;
-                text.style.fontSize = '14px';
-                text.style.padding = '15px 5px';
+                
+                item.appendChild(img);
                 item.appendChild(text);
-            };
+                wheel.appendChild(item);
+            });
             
-            const name = document.createElement('div');
-            name.className = 'prize-name';
-            name.textContent = prize.name;
+            // Add center circle
+            const center = document.createElement('div');
+            center.style.position = 'absolute';
+            center.style.top = '50%';
+            center.style.left = '50%';
+            center.style.transform = 'translate(-50%, -50%)';
+            center.style.width = '70px';
+            center.style.height = '70px';
+            center.style.background = 'linear-gradient(45deg, #ff9d00, #ffce76)';
+            center.style.borderRadius = '50%';
+            center.style.boxShadow = '0 0 15px rgba(255, 157, 0, 0.7)';
+            center.style.zIndex = '5';
+            center.style.display = 'flex';
+            center.style.alignItems = 'center';
+            center.style.justifyContent = 'center';
+            center.style.fontSize = '30px';
+            center.innerHTML = '🎰';
             
-            item.appendChild(img);
-            item.appendChild(name);
-            return item;
+            wheel.appendChild(center);
         }
 
-        function selectRandomPrize() {
-            const total = prizes.reduce((sum, p) => sum + p.probability, 0);
-            let random = Math.random() * total;
-            
-            for (let i = 0; i < prizes.length; i++) {
-                random -= prizes[i].probability;
-                if (random <= 0) {
-                    return { prize: prizes[i], index: i };
-                }
-            }
-            return { prize: prizes[0], index: 0 };
-        }
+        let isSpinning = false;
 
-        function spinRoulette() {
+        spinButton.addEventListener('click', async () => {
             if (isSpinning) return;
             
             isSpinning = true;
-            const spinButton = document.getElementById('spinButton');
             spinButton.disabled = true;
-            document.getElementById('result').style.display = 'none';
+            prizeDisplay.style.display = 'none';
+
+            // Select random prize based on probability
+            const randomPrize = selectPrize();
             
-            currentSpeed = BASE_SPEED;
-            const selection = selectRandomPrize();
-            selectedPrize = selection.prize;
-            targetPrizeIndex = selection.index;
+            // Calculate rotation (multiple full rotations + prize position)
+            const fullRotations = 5 + Math.floor(Math.random() * 3);
+            const prizeIndex = prizes.findIndex(p => p.name === randomPrize.name);
+            const prizeAngle = (360 / prizes.length) * prizeIndex;
+            const totalRotation = (fullRotations * 360) + (360 - prizeAngle) + 180;
             
-            const track = document.getElementById('rouletteTrack');
-            track.style.transition = 'none';
-            track.style.transform = 'translateX(0px)';
-            currentPosition = 0;
+            // Apply spinning animation
+            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
             
-            startTimestamp = performance.now();
-            startAnimation();
+            // Create confetti effect
+            createConfetti();
             
+            // Show prize after animation
             setTimeout(() => {
-                startSlowdown();
-            }, 3000);
+                prizeName.textContent = randomPrize.name;
+                prizeImageLarge.src = `images/${randomPrize.image}`;
+                prizeDisplay.style.display = 'block';
+                
+                // Send data to Telegram
+                loading.style.display = 'block';
+                sendPrizeToTelegram(randomPrize);
+            }, 4000);
+        });
+
+        function selectPrize() {
+            const random = Math.random() * 100;
+            let cumulativeProbability = 0;
+            
+            for (const prize of prizes) {
+                cumulativeProbability += prize.probability;
+                if (random <= cumulativeProbability) {
+                    return prize;
+                }
+            }
+            
+            return prizes[0]; // Fallback
         }
 
-        function startAnimation() {
-            const track = document.getElementById('rouletteTrack');
-            const segmentWidth = prizes.length * ITEM_WIDTH;
-            
-            function animate(timestamp) {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const elapsed = timestamp - startTimestamp;
+        function createConfetti() {
+            for (let i = 0; i < 60; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
                 
-                if (elapsed < 1000) {
-                    currentSpeed = BASE_SPEED * Math.min(elapsed / 1000, 1);
+                // Random confetti shapes
+                const shapes = ['square', 'circle', 'rectangle', 'triangle'];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                if (shape === 'square') {
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                } else if (shape === 'circle') {
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                } else if (shape === 'rectangle') {
+                    confetti.style.width = '8px';
+                    confetti.style.height = '16px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                } else if (shape === 'triangle') {
+                    confetti.style.width = '0';
+                    confetti.style.height = '0';
+                    confetti.style.borderLeft = '8px solid transparent';
+                    confetti.style.borderRight = '8px solid transparent';
+                    confetti.style.borderBottom = `16px solid hsl(${Math.random() * 360}, 100%, 60%)`;
+                    confetti.style.background = 'transparent';
                 }
                 
-                currentPosition -= currentSpeed;
+                confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
                 
-                if (Math.abs(currentPosition) >= segmentWidth) {
-                    currentPosition += segmentWidth;
-                    track.style.transition = 'none';
-                    track.style.transform = `translateX(${currentPosition}px)`;
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        function sendPrizeToTelegram(prize) {
+            try {
+                // Send data to Telegram WebApp
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const webApp = window.Telegram.WebApp;
+                    
+                    const prizeData = {
+                        prize_name: prize.name,
+                        prize_image: prize.image
+                    };
+                    
+                    webApp.sendData(JSON.stringify(prizeData));
+                    
+                    // Close after a short delay
+                    setTimeout(() => {
+                        webApp.close();
+                    }, 1500);
                 } else {
-                    track.style.transform = `translateX(${currentPosition}px)`;
+                    // Fallback for testing
+                    console.log('Prize won:', prize.name);
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                    }, 2000);
                 }
-                
-                if (isSpinning) {
-                    animationId = requestAnimationFrame(animate);
-                }
+            } catch (error) {
+                console.error('Error sending prize:', error);
+                loading.style.display = 'none';
             }
-            
-            animationId = requestAnimationFrame(animate);
         }
 
-        function startSlowdown() {
-            const slowdownStart = performance.now();
-            const slowdownDuration = 2000;
+        // Reset wheel after animation
+        wheel.addEventListener('transitionend', () => {
+            isSpinning = false;
+            spinButton.disabled = false;
             
-            function slowDown() {
-                const elapsed = performance.now() - slowdownStart;
-                const progress = Math.min(elapsed / slowdownDuration, 1);
-                
-                currentSpeed = BASE_SPEED * Math.pow(1 - progress, 2);
-                
-                if (progress < 1) {
-                    setTimeout(slowDown, 16);
-                } else {
-                    stopOnPrize();
-                }
+            // Reset wheel position (keep visual position but reset transform for next spin)
+            const computedStyle = window.getComputedStyle(wheel);
+            const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+            const currentRotation = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
+            
+            wheel.style.transition = 'none';
+            wheel.style.transform = `rotate(${currentRotation % 360}deg)`;
+            
+            // Force reflow
+            void wheel.offsetWidth;
+        });
+
+        // Create background stars
+        function createStars() {
+            const effectsContainer = document.querySelector('.background-effects');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                star.style.animationDuration = 3 + Math.random() * 7 + 's';
+                effectsContainer.appendChild(star);
             }
-            
-            slowDown();
         }
 
-        function stopOnPrize() {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-            
-            const track = document.getElementById('rouletteTrack');
-            const segmentWidth = prizes.length * ITEM_WIDTH;
-            
-            let normalizedPosition = currentPosition % segmentWidth;
-            if (normalizedPosition < 0) normalizedPosition += segmentWidth;
-            
-            const targetPosition = -(targetPrizeIndex * ITEM_WIDTH + ITEM_WIDTH / 2 - CONTAINER_WIDTH / 2);
-            
-            track.style.transition = 'transform 2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            track.style.transform = `translateX(${targetPosition}px)`;
-            
-            setTimeout(() => {
-                showResult();
-                isSpinning = false;
-                document.getElementById('spinButton').disabled = false;
-                currentPosition = targetPosition;
-            }, 2000);
-        }
-
-        function showResult() {
-            const result = document.getElementById('result');
-            const resultImage = document.getElementById('resultImage');
-            const prizeName = document.getElementById('prizeName');
-            const prizeDescription = document.getElementById('prizeDescription');
-            
-            resultImage.src = `images/${selectedPrize.image}`;
-            resultImage.onerror = () => {
-                resultImage.style.display = 'none';
-            };
-            resultImage.style.display = 'block';
-            prizeName.textContent = `🎉 ВЫ ВЫИГРАЛИ: ${selectedPrize.name.toUpperCase()}!`;
-            prizeDescription.textContent = selectedPrize.description;
-            result.style.display = 'block';
-        }
-
-        function sendResultToBot() {
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('claimButton').disabled = true;
-            
-            Telegram.WebApp.sendData(JSON.stringify({
-                prize_name: selectedPrize.name,
-                prize_image: selectedPrize.image
-            }));
-            
-            setTimeout(() => {
-                Telegram.WebApp.close();
-            }, 2000);
-        }
-
-        // Инициализация
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            createRoulette();
+            createWheelItems();
+            createStars();
             
+            // Preload images
             prizes.forEach(prize => {
                 const img = new Image();
                 img.src = `images/${prize.image}`;
             });
-            
-            document.getElementById('spinButton').addEventListener('click', spinRoulette);
-            document.getElementById('claimButton').addEventListener('click', sendResultToBot);
-            
-            Telegram.WebApp.ready();
-            Telegram.WebApp.expand();
-            Telegram.WebApp.enableClosingConfirmation();
         });
     </script>
 </body>
 </html>
-[file content end]
