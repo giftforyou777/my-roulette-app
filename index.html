@@ -415,8 +415,8 @@
         function createRouletteItems() {
             rouletteTrack.innerHTML = '';
             
-            // Create only 2 copies for better performance
-            for (let copy = 0; copy < 2; copy++) {
+            // Create 4 copies for seamless looping
+            for (let copy = 0; copy < 4; copy++) {
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
                     item.className = 'roulette-item';
@@ -448,12 +448,15 @@
             spinButton.disabled = true;
             prizeDisplay.style.display = 'none';
             
+            // Reset position for multiple spins
+            resetRoulettePosition();
+            
             // Select random prize based on probability
             targetPrize = selectPrize();
             
             // Moderate spinning
-            const extraRotations = 5;
-            const totalItems = prizes.length * 2;
+            const extraRotations = 3;
+            const totalItems = rouletteTrack.children.length;
             const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
             
             // Calculate target position
@@ -461,6 +464,12 @@
             
             // Use requestAnimationFrame for smooth animation
             animateRoulette(targetPosition);
+        }
+
+        function resetRoulettePosition() {
+            // Reset to initial position for multiple spins
+            currentPosition = -(prizes.length * 140);
+            rouletteTrack.style.transform = `translate3d(${currentPosition}px, 0, 0)`;
         }
 
         function animateRoulette(targetPosition) {
@@ -555,8 +564,7 @@
             createRouletteItems();
             
             // Set initial position
-            currentPosition = -(prizes.length * 140);
-            rouletteTrack.style.transform = `translate3d(${currentPosition}px, 0, 0)`;
+            resetRoulettePosition();
             
             // Add event listener
             spinButton.addEventListener('click', startSpinning);
