@@ -96,6 +96,7 @@
             height: 100%;
             left: 0;
             will-change: transform;
+            transition-timing-function: cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
         .roulette-item {
@@ -214,8 +215,9 @@
             letter-spacing: 1px;
         }
 
-        .spin-button:hover::before {
-            opacity: 1;
+        .spin-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 157, 0, 0.8);
         }
 
         .spin-button:active {
@@ -421,6 +423,7 @@
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
                     item.className = 'roulette-item';
+                    item.dataset.prizeIndex = index; // Добавляем индекс приза
                     
                     const img = document.createElement('img');
                     img.className = 'prize-image';
@@ -455,37 +458,48 @@
             // Select random prize based on probability
             targetPrize = selectPrize();
             
-            // Moderate spinning
-            const extraRotations = 3;
-            const totalItems = rouletteTrack.children.length;
+            // Calculate target position
             const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
+            const itemWidth = 140;
+            const containerWidth = 500;
+            const centerPosition = containerWidth / 2;
             
-            // Calculate target position - ensure it's within the track
-            const targetPosition = -(totalItems * 140 / 2 + (targetIndex * 140) + 70 + (extraRotations * prizes.length * 140));
+            // Calculate the exact position where the target prize is centered
+            const targetPosition = -(targetIndex * itemWidth) - (itemWidth / 2) + centerPosition;
+            
+            // Add some extra rotations for visual effect
+            const extraRotations = 3;
+            const extraDistance = extraRotations * prizes.length * itemWidth;
+            
+            // Final target position with extra rotations
+            const finalTargetPosition = targetPosition - extraDistance;
             
             // Use requestAnimationFrame for smooth animation
-            animateRoulette(targetPosition);
+            animateRoulette(finalTargetPosition);
         }
 
         function resetRoulettePosition() {
             // Reset to initial position for multiple spins
-            currentPosition = -(prizes.length * 140);
+            currentPosition = 0;
             rouletteTrack.style.transform = `translate3d(${currentPosition}px, 0, 0)`;
         }
 
         function animateRoulette(targetPosition) {
             const startPosition = currentPosition;
             const startTime = performance.now();
-            const duration = 3500;
+            const duration = 5000; // 5 seconds for smooth animation
+            
+            // Custom easing function for smooth deceleration
+            function easeOutQuart(t) {
+                return 1 - Math.pow(1 - t, 4);
+            }
             
             function updateAnimation(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Smooth easing function
-                const easing = progress < 0.8 
-                    ? progress * 1.2 
-                    : 0.96 + (progress - 0.8) * 0.2;
+                // Apply easing for smooth deceleration
+                const easing = easeOutQuart(progress);
                 
                 currentPosition = startPosition + (targetPosition - startPosition) * easing;
                 
