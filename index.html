@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #1a0933 0%, #2d1b65 100%);
+            background: linear-gradient(135deg, #0c0c21 0%, #1a1a3a 50%, #2d2d5a 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -28,14 +28,16 @@
         }
 
         .container {
-            background: linear-gradient(145deg, rgba(40, 30, 80, 0.95), rgba(30, 20, 60, 0.95));
-            border-radius: 20px;
-            padding: 25px 20px;
+            background: linear-gradient(145deg, rgba(20, 20, 40, 0.95), rgba(10, 10, 25, 0.95));
+            border-radius: 25px;
+            padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7),
+                        0 0 0 2px rgba(255, 215, 0, 0.3),
+                        0 0 30px rgba(255, 215, 0, 0.2);
             width: 100%;
             max-width: 500px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -52,35 +54,56 @@
             pointer-events: none;
         }
 
+        .header {
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
         .title {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(45deg, #ffd700, #ff9d00);
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ff9d00, #ff6b00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(255, 157, 0, 0.4);
+            text-shadow: 0 4px 15px rgba(255, 157, 0, 0.5);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             color: #d0d0ff;
-            margin-bottom: 20px;
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         .roulette-container {
             position: relative;
-            margin: 20px 0;
-            height: 160px;
+            margin: 30px 0;
+            height: 180px;
             overflow: hidden;
-            border-radius: 15px;
+            border-radius: 20px;
             background: rgba(0, 0, 0, 0.4);
             border: 2px solid rgba(255, 215, 0, 0.4);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6),
-                        0 8px 16px rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8),
+                        0 10px 25px rgba(0, 0, 0, 0.6);
             z-index: 2;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .roulette-track {
@@ -92,28 +115,34 @@
         }
 
         .roulette-item {
-            width: 100px;
+            width: 110px;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px;
+            padding: 15px;
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.1));
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
             position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .roulette-item:hover {
+            transform: scale(1.05);
+            z-index: 5;
         }
 
         .roulette-item::before {
             content: '';
             position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 8px;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
             pointer-events: none;
         }
 
@@ -122,22 +151,30 @@
         }
 
         .prize-image {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.7));
+            transition: all 0.3s ease;
+        }
+
+        .roulette-item:hover .prize-image {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .prize-name {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             text-align: center;
             color: #ffdd99;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-            padding: 2px 6px;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 3px 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
         .center-indicator {
@@ -145,7 +182,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 4px;
+            width: 6px;
             height: 100%;
             background: linear-gradient(to bottom, 
                 transparent, 
@@ -153,45 +190,46 @@
                 #ff3366, 
                 transparent);
             z-index: 10;
-            box-shadow: 0 0 10px rgba(255, 51, 102, 0.8);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.9);
+        }
+
+        .center-indicator::before,
+        .center-indicator::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #ff3366;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.9);
+            z-index: 11;
         }
 
         .center-indicator::before {
-            content: '▼';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 16px;
-            color: #ff3366;
-            text-shadow: 0 0 8px rgba(255, 51, 102, 1);
-            font-weight: bold;
+            top: -15px;
+            clip-path: polygon(50% 50%, 0 0, 100% 0);
         }
 
         .center-indicator::after {
-            content: '▲';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 16px;
-            color: #ff3366;
-            text-shadow: 0 0 8px rgba(255, 51, 102, 1);
-            font-weight: bold;
+            bottom: -15px;
+            clip-path: polygon(50% 50%, 0 100%, 100% 100%);
         }
 
         .spin-button {
             background: linear-gradient(145deg, #ff9d00, #ff6b00);
             border: none;
-            padding: 14px 0;
-            font-size: 16px;
-            font-weight: 700;
+            padding: 18px 0;
+            font-size: 18px;
+            font-weight: 800;
             color: white;
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.2s ease;
-            box-shadow: 0 5px 15px rgba(255, 157, 0, 0.5);
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 157, 0, 0.6),
+                        0 0 0 3px rgba(255, 215, 0, 0.3);
             position: relative;
             overflow: hidden;
             z-index: 2;
@@ -199,72 +237,137 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .spin-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .spin-button:hover::before {
+            opacity: 1;
+            animation: shine 1.5s infinite;
         }
 
         .spin-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 3px 10px rgba(255, 157, 0, 0.4);
+            transform: translateY(3px);
+            box-shadow: 0 5px 20px rgba(255, 157, 0, 0.5);
         }
 
         .spin-button:disabled {
             background: linear-gradient(145deg, #555, #333);
             transform: none;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             cursor: not-allowed;
         }
 
         .prize-display {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(50, 40, 90, 0.7);
-            border-radius: 16px;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(50, 40, 90, 0.8), rgba(40, 30, 80, 0.8));
+            border-radius: 20px;
             display: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: prizeAppear 0.6s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            animation: prizeAppear 0.8s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+                        inset 0 0 20px rgba(255, 215, 0, 0.2);
             position: relative;
             z-index: 2;
+            overflow: hidden;
+        }
+
+        .prize-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle fill="%23FFFFFF" cx="25" cy="25" r="1"/><circle fill="%23FFFFFF" cx="75" cy="75" r="1"/><circle fill="%23FFFFFF" cx="75" cy="25" r="1"/><circle fill="%23FFFFFF" cx="25" cy="75" r="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: -1;
         }
 
         .prize-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #00ffcc;
-            text-shadow: 0 2px 8px rgba(0, 255, 204, 0.4);
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffcc, #00ccff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .prize-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ccff, transparent);
         }
 
         .prize-name-large {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 12px 0;
-            color: #ffd700;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+            font-size: 28px;
+            font-weight: 800;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #ffd700, #ffa500, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(255, 206, 118, 0.6);
         }
 
         .prize-image-large {
-            width: 70px;
-            height: 70px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
-            margin: 16px auto;
-            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.6));
+            margin: 25px auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
             animation: float 3s ease-in-out infinite;
+            transform-style: preserve-3d;
         }
 
         .loading {
             display: none;
-            margin-top: 16px;
+            margin-top: 25px;
         }
 
         .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #ff9d00;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ff9d00;
             border-radius: 50%;
             animation: spin 1.5s linear infinite;
             margin: 0 auto;
+            box-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
+            position: relative;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top: 2px solid rgba(255, 157, 0, 0.3);
+            animation: spin 2s linear infinite;
         }
 
         @keyframes spin {
@@ -275,20 +378,20 @@
         @keyframes prizeAppear {
             0% { 
                 opacity: 0; 
-                transform: translateY(30px) scale(0.9);
+                transform: translateY(50px) scale(0.9) rotate(-5deg);
             }
             100% { 
                 opacity: 1; 
-                transform: translateY(0) scale(1);
+                transform: translateY(0) scale(1) rotate(0deg);
             }
         }
 
         @keyframes float {
             0%, 100% { 
-                transform: translateY(0px);
+                transform: translateY(0px) rotate(0deg) scale(1);
             }
             50% { 
-                transform: translateY(-8px);
+                transform: translateY(-15px) rotate(5deg) scale(1.05);
             }
         }
 
@@ -297,31 +400,89 @@
             100% { transform: rotate(360deg); }
         }
 
-        .instructions {
-            margin-top: 16px;
-            font-size: 12px;
-            color: #a0a0ff;
-            line-height: 1.4;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
-        /* Адаптивность для очень маленьких экранов */
-        @media (max-width: 340px) {
+        .instructions {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #a0a0ff;
+            line-height: 1.6;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            position: relative;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 480px) {
             .container {
-                padding: 16px;
+                padding: 20px 15px;
+                border-radius: 20px;
             }
             
             .title {
-                font-size: 22px;
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
             }
             
             .roulette-container {
-                height: 140px;
+                height: 160px;
+                margin: 25px 0;
             }
             
             .roulette-item {
+                width: 100px;
+                padding: 12px;
+            }
+            
+            .prize-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .prize-name {
+                font-size: 11px;
+            }
+            
+            .spin-button {
+                padding: 16px 0;
+                font-size: 16px;
+            }
+            
+            .prize-title {
+                font-size: 22px;
+            }
+            
+            .prize-name-large {
+                font-size: 24px;
+            }
+            
+            .prize-image-large {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .roulette-item {
                 width: 90px;
-                padding: 10px;
             }
             
             .prize-image {
@@ -332,24 +493,20 @@
             .prize-name {
                 font-size: 10px;
             }
-        }
-
-        /* Стили для темной темы Telegram */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #0c0c21 0%, #1a1a3a 100%);
-            }
             
-            .container {
-                background: linear-gradient(145deg, rgba(30, 30, 60, 0.95), rgba(20, 20, 40, 0.95));
+            .spin-button {
+                padding: 14px 0;
+                font-size: 15px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
-        <p class="subtitle">Крутите ленту и выигрывайте призы!</p>
+        <div class="header">
+            <h1 class="title">🎰 РУЛЕТКА УДАЧИ</h1>
+            <p class="subtitle">Крутите ленту и выигрывайте призы!</p>
+        </div>
 
         <div class="roulette-container">
             <div class="center-indicator"></div>
@@ -364,14 +521,14 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="margin-top: 12px; color: #ffcc99; font-size: 13px;">Отправка приза...</p>
+            <p style="margin-top: 15px; color: #ffcc99; font-size: 14px;">Отправка приза...</p>
         </div>
 
         <div class="prize-display" id="prizeDisplay">
             <div class="prize-title">🎉 ПОЗДРАВЛЯЕМ!</div>
             <img class="prize-image-large" id="prizeImageLarge" src="" alt="Приз">
             <div class="prize-name-large" id="prizeName"></div>
-            <p style="color: #ccccff; font-size: 13px; margin-top: 10px;">Ваш приз скоро будет зачислен</p>
+            <p style="color: #ccccff; font-size: 14px; margin-top: 15px;">Ваш приз скоро будет зачислен</p>
         </div>
 
         <div class="instructions">
@@ -472,7 +629,7 @@
             
             // Calculate target position
             const targetIndex = prizes.findIndex(p => p.name === targetPrize.name);
-            const itemWidth = 100;
+            const itemWidth = 110;
             const containerWidth = document.querySelector('.roulette-container').offsetWidth;
             const centerPosition = containerWidth / 2;
             
@@ -537,9 +694,49 @@
             prizeImageLarge.src = `images/${targetPrize.image}`;
             prizeDisplay.style.display = 'block';
             
+            // Create confetti effect
+            createConfetti();
+            
             // Send data to Telegram
             loading.style.display = 'block';
             sendPrizeToTelegram(targetPrize);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (5 + Math.random() * 10) + 'px';
+                confetti.style.height = (5 + Math.random() * 10) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                
+                container.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { 
+                        opacity: 1,
+                        transform: 'translateY(0) rotate(0deg)',
+                        top: '0%'
+                    },
+                    { 
+                        opacity: 1,
+                        transform: `translateY(500px) rotate(${1080 + Math.random() * 360}deg)`,
+                        top: '100%'
+                    }
+                ], {
+                    duration: 2000 + Math.random() * 3000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
         }
 
         function selectPrize() {
@@ -599,8 +796,8 @@
             // Добавляем обработчик для сенсорных устройств
             spinButton.addEventListener('touchstart', function(e) {
                 e.preventDefault();
-                this.style.transform = 'translateY(2px)';
-                this.style.boxShadow = '0 3px 10px rgba(255, 157, 0, 0.4)';
+                this.style.transform = 'translateY(3px)';
+                this.style.boxShadow = '0 5px 15px rgba(255, 157, 0, 0.4)';
             }, {passive: false});
             
             spinButton.addEventListener('touchend', function(e) {
