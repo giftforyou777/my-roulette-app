@@ -424,11 +424,35 @@
         let currentPosition = 0;
         let targetPrize = null;
         let totalCopies = 8;
+        let sessionToken = null;
+        let userId = null;
 
         // Функция для получения параметров из URL
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+
+        // Проверка доступности попыток через API
+        async function checkSpinsAvailability() {
+            try {
+                const response = await fetch('/api/check_spins', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: sessionToken,
+                        user_id: userId
+                    })
+                });
+                
+                const data = await response.json();
+                return data.available;
+            } catch (error) {
+                console.error('Error checking spins:', error);
+                return false;
+            }
         }
 
         // Preload all images first
@@ -479,15 +503,19 @@
             }
         }
 
-        function startSpinning() {
+        async function startSpinning() {
             if (isSpinning) return;
             
             // Проверяем, есть ли токен и user_id в URL
-            const token = getQueryParam('token');
-            const userId = getQueryParam('user_id');
-            
-            if (!token || !userId) {
+            if (!sessionToken || !userId) {
                 showError('❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.');
+                return;
+            }
+            
+            // Проверяем доступность попыток на сервере
+            const spinsAvailable = await checkSpinsAvailability();
+            if (!spinsAvailable) {
+                showError('❌ У вас нет доступных прокруток рулетки!');
                 return;
             }
             
@@ -600,14 +628,10 @@
                 if (window.Telegram && window.Telegram.WebApp) {
                     const webApp = window.Telegram.WebApp;
                     
-                    // Получаем параметры из URL
-                    const token = getQueryParam('token');
-                    const userId = getQueryParam('user_id');
-                    
                     const prizeData = {
                         prize_name: prize.name,
                         prize_image: prize.image,
-                        token: token,
+                        token: sessionToken,
                         user_id: userId
                     };
                     
@@ -619,21 +643,23 @@
                 } else {
                     setTimeout(() => {
                         loading.style.display = 'none';
+                        alert('Приз отправлен! Вернитесь в бота, чтобы увидеть результат.');
                     }, 2000);
                 }
             } catch (error) {
                 console.error('Error sending prize:', error);
                 loading.style.display = 'none';
+                alert('Ошибка отправки приза. Пожалуйста, сообщите администратору.');
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             // Проверяем, есть ли токен и user_id в URL
-            const token = getQueryParam('token');
-            const userId = getQueryParam('user_id');
+            sessionToken = getQueryParam('token');
+            userId = getQueryParam('user_id');
             
-            if (!token || !userId) {
+            if (!sessionToken || !userId) {
                 showError('❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.');
                 return;
             }
