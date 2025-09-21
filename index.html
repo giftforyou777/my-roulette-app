@@ -397,19 +397,19 @@
 
     <script>
         const prizes = [
-            { name: "10 монет", probability: 99.88, image: "gift1.png" },
-            { name: "100 монет", probability: 0.01, image: "gift2.png" },
-            { name: "50 монет", probability: 0.01, image: "gift3.png" },
-            { name: "Evil Eye", probability: 0.01, image: "gift4.png" },
-            { name: "Berry Box", probability: 0.01, image: "gift5.png" },
-            { name: "Vintage Cigar", probability: 0.01, image: "gift6.png" },
-            { name: "Lol Pop", probability: 0.01, image: "gift7.png" },
-            { name: "Lol Pop", probability: 0.01, image: "gift8.png" },
-            { name: "Ginger Cookie", probability: 0.01, image: "gift9.png" },
-            { name: "Swiss Watch", probability: 0.01, image: "gift10.png" },
-            { name: "Heroic Helmet", probability: 0.01, image: "gift11.png" },
-            { name: "Jolly Chimp", probability: 0.01, image: "gift12.png" },
-            { name: "Snoop Dogg", probability: 0.01, image: "gift13.png" }
+            { name: "10 монет", probability: 99.88, image: "https://via.placeholder.com/50x50/FFD700/000000?text=10" },
+            { name: "100 монет", probability: 0.01, image: "https://via.placeholder.com/50x50/FFD700/000000?text=100" },
+            { name: "50 монет", probability: 0.01, image: "https://via.placeholder.com/50x50/FFD700/000000?text=50" },
+            { name: "Evil Eye", probability: 0.01, image: "https://via.placeholder.com/50x50/FF0000/FFFFFF?text=👁️" },
+            { name: "Berry Box", probability: 0.01, image: "https://via.placeholder.com/50x50/FF00FF/FFFFFF?text=🍓" },
+            { name: "Vintage Cigar", probability: 0.01, image: "https://via.placeholder.com/50x50/964B00/FFFFFF?text=🚬" },
+            { name: "Lol Pop", probability: 0.01, image: "https://via.placeholder.com/50x50/FF69B4/FFFFFF?text=🍭" },
+            { name: "Lol Pop", probability: 0.01, image: "https://via.placeholder.com/50x50/FF69B4/FFFFFF?text=🍭" },
+            { name: "Ginger Cookie", probability: 0.01, image: "https://via.placeholder.com/50x50/8B4513/FFFFFF?text=🍪" },
+            { name: "Swiss Watch", probability: 0.01, image: "https://via.placeholder.com/50x50/000000/FFFFFF?text=⌚" },
+            { name: "Heroic Helmet", probability: 0.01, image: "https://via.placeholder.com/50x50/C0C0C0/000000?text=⛑️" },
+            { name: "Jolly Chimp", probability: 0.01, image: "https://via.placeholder.com/50x50/8B4513/FFFFFF?text=🐵" },
+            { name: "Snoop Dogg", probability: 0.01, image: "https://via.placeholder.com/50x50/000000/FFFFFF?text=🐶" }
         ];
 
         const rouletteTrack = document.getElementById('rouletteTrack');
@@ -446,11 +446,13 @@
                         loaded++;
                         if (loaded === total) resolve();
                     };
-                    img.onerror = () {
+                    img.onerror = () => {
+                        // Если изображение не загрузилось, используем заглушку
+                        prize.image = "https://via.placeholder.com/50x50/333333/FFFFFF?text=🎁";
                         loaded++;
                         if (loaded === total) resolve();
                     };
-                    img.src = `images/${prize.image}`;
+                    img.src = prize.image;
                 });
             });
         }
@@ -468,8 +470,12 @@
                     
                     const img = document.createElement('img');
                     img.className = 'prize-image';
-                    img.src = `images/${prize.image}`;
+                    img.src = prize.image;
                     img.alt = prize.name;
+                    img.onerror = function() {
+                        // Если изображение не загрузилось, используем заглушку
+                        this.src = "https://via.placeholder.com/50x50/333333/FFFFFF?text=🎁";
+                    };
                     
                     const text = document.createElement('div');
                     text.className = 'prize-name';
@@ -573,7 +579,10 @@
             
             // Show prize
             prizeName.textContent = targetPrize.name;
-            prizeImageLarge.src = `images/${targetPrize.image}`;
+            prizeImageLarge.src = targetPrize.image;
+            prizeImageLarge.onerror = function() {
+                this.src = "https://via.placeholder.com/70x70/333333/FFFFFF?text=🎁";
+            };
             prizeDisplay.style.display = 'block';
             
             // Send data to Telegram
