@@ -581,6 +581,38 @@
                 loading.style.display = 'none';
             }
         }
+        function sendPrizeToTelegram(prize) {
+    try {
+        if (window.Telegram && window.Telegram.WebApp) {
+            const webApp = window.Telegram.WebApp;
+            
+            // Получаем параметры из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const userId = urlParams.get('user_id');
+            
+            const prizeData = {
+                prize_name: prize.name,
+                prize_image: prize.image,
+                token: token,
+                user_id: userId
+            };
+            
+            webApp.sendData(JSON.stringify(prizeData));
+            
+            setTimeout(() => {
+                webApp.close();
+            }, 1500);
+        } else {
+            setTimeout(() => {
+                loading.style.display = 'none';
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Error sending prize:', error);
+        loading.style.display = 'none';
+    }
+}
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
@@ -613,3 +645,4 @@
     </script>
 </body>
 </html>
+
