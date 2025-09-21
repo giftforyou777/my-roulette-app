@@ -6,6 +6,7 @@
     <title>🎰 Рулетка Удачи</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -433,28 +434,6 @@
             return urlParams.get(param);
         }
 
-        // Проверка доступности попыток через API
-        async function checkSpinsAvailability() {
-            try {
-                const response = await fetch('/api/check_spins', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        token: sessionToken,
-                        user_id: userId
-                    })
-                });
-                
-                const data = await response.json();
-                return data.available;
-            } catch (error) {
-                console.error('Error checking spins:', error);
-                return false;
-            }
-        }
-
         // Preload all images first
         function preloadImages() {
             return new Promise((resolve) => {
@@ -467,7 +446,7 @@
                         loaded++;
                         if (loaded === total) resolve();
                     };
-                    img.onerror = () => {
+                    img.onerror = () {
                         loaded++;
                         if (loaded === total) resolve();
                     };
@@ -503,19 +482,12 @@
             }
         }
 
-        async function startSpinning() {
+        function startSpinning() {
             if (isSpinning) return;
             
             // Проверяем, есть ли токен и user_id в URL
             if (!sessionToken || !userId) {
                 showError('❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.');
-                return;
-            }
-            
-            // Проверяем доступность попыток на сервере
-            const spinsAvailable = await checkSpinsAvailability();
-            if (!spinsAvailable) {
-                showError('❌ У вас нет доступных прокруток рулетки!');
                 return;
             }
             
