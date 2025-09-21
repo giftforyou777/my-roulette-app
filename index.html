@@ -267,6 +267,17 @@
             margin: 0 auto;
         }
 
+        .error-message {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(90, 30, 30, 0.7);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            text-align: center;
+            color: #ff9999;
+            display: none;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -362,6 +373,10 @@
             <span>🎰</span> КРУТИТЬ РУЛЕТКУ
         </button>
 
+        <div class="error-message" id="errorMessage">
+            ❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.
+        </div>
+
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p style="margin-top: 12px; color: #ffcc99; font-size: 13px;">Отправка приза...</p>
@@ -402,12 +417,19 @@
         const prizeName = document.getElementById('prizeName');
         const prizeImageLarge = document.getElementById('prizeImageLarge');
         const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
 
         let isSpinning = false;
         let animationId = null;
         let currentPosition = 0;
         let targetPrize = null;
         let totalCopies = 8;
+
+        // Функция для получения параметров из URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
         // Preload all images first
         function preloadImages() {
@@ -460,9 +482,19 @@
         function startSpinning() {
             if (isSpinning) return;
             
+            // Проверяем, есть ли токен и user_id в URL
+            const token = getQueryParam('token');
+            const userId = getQueryParam('user_id');
+            
+            if (!token || !userId) {
+                showError('❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.');
+                return;
+            }
+            
             isSpinning = true;
             spinButton.disabled = true;
             prizeDisplay.style.display = 'none';
+            errorMessage.style.display = 'none';
             
             // Reset position for multiple spins
             resetRoulettePosition();
@@ -488,6 +520,13 @@
             
             // Use requestAnimationFrame for smooth animation
             animateRoulette(finalTargetPosition);
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            spinButton.disabled = true;
+            spinButton.innerHTML = '<span>❌</span> ОШИБКА ДОСТУПА';
         }
 
         function resetRoulettePosition() {
@@ -561,9 +600,15 @@
                 if (window.Telegram && window.Telegram.WebApp) {
                     const webApp = window.Telegram.WebApp;
                     
+                    // Получаем параметры из URL
+                    const token = getQueryParam('token');
+                    const userId = getQueryParam('user_id');
+                    
                     const prizeData = {
                         prize_name: prize.name,
-                        prize_image: prize.image
+                        prize_image: prize.image,
+                        token: token,
+                        user_id: userId
                     };
                     
                     webApp.sendData(JSON.stringify(prizeData));
@@ -581,41 +626,18 @@
                 loading.style.display = 'none';
             }
         }
-        function sendPrizeToTelegram(prize) {
-    try {
-        if (window.Telegram && window.Telegram.WebApp) {
-            const webApp = window.Telegram.WebApp;
-            
-            // Получаем параметры из URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
-            const userId = urlParams.get('user_id');
-            
-            const prizeData = {
-                prize_name: prize.name,
-                prize_image: prize.image,
-                token: token,
-                user_id: userId
-            };
-            
-            webApp.sendData(JSON.stringify(prizeData));
-            
-            setTimeout(() => {
-                webApp.close();
-            }, 1500);
-        } else {
-            setTimeout(() => {
-                loading.style.display = 'none';
-            }, 2000);
-        }
-    } catch (error) {
-        console.error('Error sending prize:', error);
-        loading.style.display = 'none';
-    }
-}
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
+            // Проверяем, есть ли токен и user_id в URL
+            const token = getQueryParam('token');
+            const userId = getQueryParam('user_id');
+            
+            if (!token || !userId) {
+                showError('❌ Ошибка доступа к рулетке. Пожалуйста, откройте рулетку через бота.');
+                return;
+            }
+            
             // Preload images first
             await preloadImages();
             
@@ -645,4 +667,3 @@
     </script>
 </body>
 </html>
-
