@@ -409,6 +409,11 @@
         let targetPrize = null;
         let totalCopies = 8;
 
+        // Получаем параметры из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const userId = urlParams.get('user_id');
+
         // Preload all images first
         function preloadImages() {
             return new Promise((resolve) => {
@@ -561,28 +566,25 @@
                 if (window.Telegram && window.Telegram.WebApp) {
                     const webApp = window.Telegram.WebApp;
                     
-                    // Получаем токен и user_id из URL параметров
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const token = urlParams.get('token');
-                    const user_id = urlParams.get('user_id');
-                    
                     const prizeData = {
                         prize_name: prize.name,
                         prize_image: prize.image,
                         token: token,
-                        user_id: user_id
+                        user_id: userId
                     };
                     
-                    console.log("Отправка данных в Telegram:", prizeData);
+                    console.log("Sending prize data to Telegram:", prizeData);
                     webApp.sendData(JSON.stringify(prizeData));
                     
                     setTimeout(() => {
                         webApp.close();
-                    }, 1500);
+                    }, 2000);
                 } else {
-                    console.log("Telegram WebApp не доступен");
+                    console.error("Telegram WebApp not available");
+                    // Fallback for testing outside Telegram
                     setTimeout(() => {
                         loading.style.display = 'none';
+                        alert(`Вы выиграли: ${prize.name}! Данные отправлены в бота.`);
                     }, 2000);
                 }
             } catch (error) {
@@ -593,6 +595,8 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
+            console.log("Roulette initialized with token:", token, "user_id:", userId);
+            
             // Preload images first
             await preloadImages();
             
